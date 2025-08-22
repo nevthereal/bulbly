@@ -1,3 +1,7 @@
-import { query } from "$app/server";
+import { getRequestEvent, query } from '$app/server';
 
-export const getAuthState = query
+export const getUser = query(() => {
+	const { locals } = getRequestEvent();
+
+	return locals.user;
+});
