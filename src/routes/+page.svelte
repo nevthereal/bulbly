@@ -1,9 +1,17 @@
 <script lang="ts">
-	import { MessageCircle } from '@lucide/svelte';
+	import DocumentChat from '$lib/components/DocumentChat.svelte';
+	import KnowledgeBase from '$lib/components/KnowledgeBase.svelte';
+	import * as Resizable from '$lib/components/ui/resizable/index.js';
 </script>
 
-<main class="rounded-2xl border">
-	<div class="border-b border-border p-6">
-		<h1 class="flex items-center gap-2 text-2xl font-semibold"><MessageCircle /> Document Chat</h1>
-	</div>
+<main class="h-[90dvh]">
+	<Resizable.PaneGroup direction="horizontal" class="flex h-full gap-2">
+		<Resizable.Pane maxSize={25}>
+			<KnowledgeBase />
+		</Resizable.Pane>
+		<Resizable.Handle withHandle />
+		<Resizable.Pane>
+			<DocumentChat />
+		</Resizable.Pane>
+	</Resizable.PaneGroup>
 </main>
