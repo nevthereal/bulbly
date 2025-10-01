@@ -29,7 +29,7 @@
 		"@tailwindcss/typography": "^0.5.15",
 		"@tailwindcss/vite": "^4.0.0",
 		"@types/node": "^22",
-		"bits-ui": "^2.9.4",
+		"bits-ui": "^2.11.4",
 		"clsx": "^2.1.1",
 		"drizzle-kit": "1.0.0-beta.1-fd8bfcc",
 		"eslint": "^9.18.0",
@@ -54,7 +54,8 @@
 		"@neondatabase/serverless": "^0.10.4",
 		"better-auth": "^1.3.7",
 		"drizzle-orm": "1.0.0-beta.1-fd8bfcc",
-		"mode-watcher": "^1.1.0"
+		"mode-watcher": "^1.1.0",
+		"zod": "^4.1.11"
 	},
 	"pnpm": {
 		"onlyBuiltDependencies": [

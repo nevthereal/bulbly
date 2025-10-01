@@ -7,11 +7,15 @@ export const project = pgTable('project', {
 	subjectId: uuid()
 		.references(() => subject.id)
 		.notNull(),
-	userId: text().references(() => user.id)
+	userId: text()
+		.references(() => user.id)
+		.notNull()
 });
 
 export const subject = pgTable('subject', {
 	id: uuid().defaultRandom().primaryKey(),
 	title: text().notNull(),
-	userId: text().references(() => user.id)
+	userId: text()
+		.references(() => user.id)
+		.notNull()
 });
