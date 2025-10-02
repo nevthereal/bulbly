@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { db } from '$lib/server/db';
 import { error, redirect } from '@sveltejs/kit';
 import { getUser } from './auth.remote';
-import { project } from '$lib/server/db/schema';
+import { project, subject } from '$lib/server/db/schema';
 
 export const getSubjectsWithProjects = query(async () => {
 	const user = await getUser();
@@ -29,7 +29,8 @@ export const getSubjects = query(async () => {
 
 	const subjects = await db.query.subject.findMany({
 		where: {
-			userId: user.id
+			userId: user.id,
+			active: true
 		}
 	});
 
@@ -53,3 +54,13 @@ export const createProject = form(
 		return redirect(302, `/project/${id}`);
 	}
 );
+
+export const createSubject = form(z.object({ title: z.string() }), async ({ title }) => {
+	const user = await getUser();
+	if (!user) return;
+
+	await db.insert(subject).values({
+		title,
+		userId: user.id
+	});
+});

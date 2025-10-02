@@ -1,4 +1,4 @@
-import { pgTable, text, uuid } from 'drizzle-orm/pg-core';
+import { boolean, pgTable, text, uuid } from 'drizzle-orm/pg-core';
 import { user } from './auth.sql';
 
 export const project = pgTable('project', {
@@ -17,5 +17,6 @@ export const subject = pgTable('subject', {
 	title: text().notNull(),
 	userId: text()
 		.references(() => user.id)
-		.notNull()
+		.notNull(),
+	active: boolean().default(true).notNull()
 });
