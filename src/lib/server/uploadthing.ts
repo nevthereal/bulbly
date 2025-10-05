@@ -22,23 +22,23 @@ export const ourFileRouter = {
 		}
 	})
 		// Set permissions and file types for this FileRoute
-		.middleware(async () => {
+		.middleware(async ({ req }) => {
 			// This code runs on your server before upload
 			const user = await getUser();
+			const event = getRequestEvent();
+
+			const { project_id } = event.params;
 
 			// If you throw, the user will not be able to upload
 			if (!user) return error(401);
+			if (!project_id) return error(404);
 
 			// Whatever is returned here is accessible in onUploadComplete as `metadata`
-			return { userId: user.id };
+			return { userId: user.id, prjId: project_id };
 		})
-		.onUploadComplete(async ({ file: uploadedFile }) => {
-			const event = getRequestEvent();
-
-			if (!event.params.project_id) return error(404);
-			// This code RUNS ON YOUR SERVER after upload
+		.onUploadComplete(async ({ file: uploadedFile, metadata }) => {
 			await db.insert(file).values({
-				projectId: event.params.project_id,
+				projectId: metadata.prjId,
 				type: uploadedFile.type,
 				utURL: uploadedFile.ufsUrl
 			});
