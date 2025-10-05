@@ -22,7 +22,7 @@ export const ourFileRouter = {
 		}
 	})
 		// Set permissions and file types for this FileRoute
-		.middleware(async ({ req }) => {
+		.middleware(async () => {
 			// This code runs on your server before upload
 			const user = await getUser();
 			const event = getRequestEvent();
@@ -40,7 +40,9 @@ export const ourFileRouter = {
 			await db.insert(file).values({
 				projectId: metadata.prjId,
 				type: uploadedFile.type,
-				utURL: uploadedFile.ufsUrl
+				utURL: uploadedFile.ufsUrl,
+				name: uploadedFile.name,
+				ownerId: metadata.userId
 			});
 		})
 } satisfies FileRouter;

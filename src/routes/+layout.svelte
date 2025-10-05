@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Toaster } from '$lib/components/ui/sonner/index.js';
 	import Logo from '$lib/components/Logo.svelte';
 	import { ModeWatcher } from 'mode-watcher';
 	import '../app.css';
@@ -16,6 +17,8 @@
 <svelte:head>
 	<link rel="icon" href="/favicon.png" type="image/png" />
 </svelte:head>
+
+<Toaster />
 
 <ModeWatcher defaultMode="dark" />
 

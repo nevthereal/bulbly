@@ -37,6 +37,26 @@ export const getSubjects = query(async () => {
 	return subjects;
 });
 
+export const getProject = query(z.uuid(), async (id) => {
+	const user = await getUser();
+
+	if (!user) return error(401);
+
+	const project = await db.query.project.findFirst({
+		where: {
+			id,
+			creatorId: user.id
+		},
+		with: {
+			files: true
+		}
+	});
+
+	if (!project) return error(404);
+
+	return project;
+});
+
 export const createProject = form(
 	z.object({ title: z.string(), subjectId: z.uuid() }),
 	async ({ title, subjectId }) => {
@@ -48,7 +68,7 @@ export const createProject = form(
 			.values({
 				name: title,
 				subjectId,
-				userId: user.id
+				creatorId: user.id
 			})
 			.returning();
 		return redirect(302, `/project/${id}`);
