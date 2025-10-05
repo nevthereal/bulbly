@@ -3,23 +3,33 @@
 
 	import Input from './ui/input/input.svelte';
 	import Button from './ui/button/button.svelte';
+	import { Progress } from '$lib/components/ui/progress/index.js';
+
 	import { generateSvelteHelpers } from '@uploadthing/svelte';
-	import type { OurFileRouter } from '$lib/server/uploadthing';
+	import type { MyRouter } from '$lib/server/uploadthing';
 	import { getProject } from '$lib/remote/projects.remote';
+	import { toast } from 'svelte-sonner';
 
 	let filesToBeUploaded: FileList | undefined = $state(undefined);
+	let uploadProgress: number | null = $state(null);
 
 	let { projectId }: { projectId: string } = $props();
 
-	const { createUploadThing } = generateSvelteHelpers<OurFileRouter>({
+	const { createUploadThing } = generateSvelteHelpers<MyRouter>({
 		url: `/project/${projectId}/upload`
 	});
 
-	const { startUpload, isUploading } = createUploadThing('imageUploader', {
-		onUploadProgress: () => {},
-		onUploadBegin: () => {},
+	const { startUpload, isUploading } = createUploadThing('uploader', {
+		onUploadProgress: (progress) => {
+			uploadProgress = progress;
+		},
+		uploadProgressGranularity: 'all',
+		onUploadBegin: (file) => {
+			toast(`Starting upload of ${file}...`);
+		},
 		onClientUploadComplete: () => {
 			filesToBeUploaded = undefined;
+			uploadProgress = null;
 		}
 	});
 
@@ -52,8 +62,11 @@
 				</li>
 			{/each}
 		</ul>
-		<Button disabled={$isUploading && !filesToBeUploaded} onclick={() => startUpload(arrayedFiles)}
+		<Button disabled={$isUploading} onclick={() => startUpload(arrayedFiles)}
 			><Upload /> Upload</Button
 		>
+		{#if uploadProgress}
+			<Progress value={uploadProgress} />
+		{/if}
 	{/if}
 </div>
