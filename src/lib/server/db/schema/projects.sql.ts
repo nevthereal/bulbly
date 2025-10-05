@@ -20,3 +20,12 @@ export const subject = pgTable('subject', {
 		.notNull(),
 	active: boolean().default(true).notNull()
 });
+
+export const file = pgTable('file', {
+	id: uuid().defaultRandom().primaryKey(),
+	utURL: text().notNull(),
+	type: text().notNull(),
+	projectId: uuid()
+		.notNull()
+		.references(() => project.id, { onDelete: 'cascade' })
+});
