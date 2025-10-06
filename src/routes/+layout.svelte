@@ -9,9 +9,10 @@
 	import Button, { buttonVariants } from '$lib/components/ui/button/button.svelte';
 	import { getUser } from '$lib/remote/auth.remote';
 	import ModeToggle from '$lib/components/ModeToggle.svelte';
+	import { goto } from '$app/navigation';
 	let { children } = $props();
 
-	const user = await getUser();
+	const user = $derived(await getUser());
 </script>
 
 <svelte:head>
@@ -34,8 +35,12 @@
 						<DropdownMenu.Separator />
 						<DropdownMenu.Item
 							variant="destructive"
-							onclick={async () => await authClient.signOut().then(() => getUser().refresh())}
-							>Sign out</DropdownMenu.Item
+							onclick={async () =>
+								await authClient.signOut().then(() =>
+									getUser()
+										.refresh()
+										.then(() => goto('/'))
+								)}>Sign out</DropdownMenu.Item
 						>
 					</DropdownMenu.Group>
 				</DropdownMenu.Content>

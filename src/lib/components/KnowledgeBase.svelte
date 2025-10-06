@@ -35,6 +35,8 @@
 			open = false;
 		}
 	});
+
+	const files = $derived(await getFiles(projectId));
 </script>
 
 <div class="flex h-full w-lg flex-col rounded-2xl border p-6">
@@ -45,7 +47,7 @@
 	<h2 class="py-2 font-medium">Your files:</h2>
 	<div class="mb-2 flex-1 overflow-y-auto">
 		<ul class="grid grid-cols-2 gap-2">
-			{#each await getFiles(projectId) as file (file.id)}
+			{#each files as file (file.id)}
 				{@const slicedName = file.name.slice(0, 12)}
 				<li class="flex flex-col justify-between gap-2 rounded-md border p-2">
 					<div class="relative">
@@ -71,6 +73,7 @@
 								</DropdownMenu.Group>
 							</DropdownMenu.Content>
 						</DropdownMenu.Root>
+
 						{#if file.type === 'image/jpeg' || file.type === 'image/png'}
 							<img src={file.utURL} alt="" class="rounded-sm" />
 						{:else if file.type === 'application/pdf'}
@@ -127,8 +130,7 @@
 				</ul>
 				<Button
 					disabled={$isUploading || Array.from(filesToBeUploaded).length === 0}
-					onclick={() =>
-						startUpload(arrayedFiles).then(async () => await getFiles(projectId).refresh())}
+					onclick={() => startUpload(arrayedFiles).then(() => getFiles(projectId).refresh())}
 					><Upload /> Upload</Button
 				>
 				{#if uploadProgress}

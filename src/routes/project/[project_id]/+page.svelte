@@ -5,7 +5,7 @@
 
 	let { params } = $props();
 
-	const project = await getProject(params.project_id);
+	const project = $derived(await getProject(params.project_id));
 </script>
 
 <main class="flex h-[90dvh] flex-col p-2">
