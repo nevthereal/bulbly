@@ -1,12 +1,14 @@
 <script lang="ts">
+	import { getUser } from '$lib/remote/auth.remote';
 	import { getSubjectsWithProjects } from '$lib/remote/projects.remote';
-
-	const subWithProjects = await getSubjectsWithProjects();
 </script>
 
-{#each subWithProjects as sub (sub.id)}
-	<h1 class="text-xl">{sub.title}:</h1>
-	{#each sub.projects as prj (prj.id)}
-		<a class="underline" href="/project/{prj.id}">{prj.name}</a>
+{#if await getUser()}
+	{@const subWithProjects = await getSubjectsWithProjects()}
+	{#each subWithProjects as sub (sub.id)}
+		<h1 class="text-xl">{sub.title}:</h1>
+		{#each sub.projects as prj (prj.id)}
+			<a class="underline" href="/project/{prj.id}">{prj.name}</a>
+		{/each}
 	{/each}
-{/each}
+{/if}

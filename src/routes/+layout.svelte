@@ -1,4 +1,6 @@
 <script lang="ts">
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
+
 	import { Toaster } from '$lib/components/ui/sonner/index.js';
 	import Logo from '$lib/components/Logo.svelte';
 	import { ModeWatcher } from 'mode-watcher';
@@ -6,8 +8,6 @@
 	import { authClient } from '$lib/auth-client';
 	import Button, { buttonVariants } from '$lib/components/ui/button/button.svelte';
 	import { getUser } from '$lib/remote/auth.remote';
-	import * as Popover from '$lib/components/ui/popover';
-	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import ModeToggle from '$lib/components/ModeToggle.svelte';
 	let { children } = $props();
 
@@ -26,18 +26,20 @@
 	<a href="/" class="flex items-center text-3xl font-black tracking-tighter"><Logo /> AURI</a>
 	<div class="flex items-center gap-2">
 		{#if user}
-			<Popover.Root>
-				<Popover.Trigger class={buttonVariants()}>{user.name}</Popover.Trigger>
-				<Popover.Content class="w-auto text-center">
-					<h1 class="text-xl font-semibold">Profile</h1>
-					<Separator class="mb-2" />
-					<Button
-						variant="destructive"
-						onclick={async () => await authClient.signOut().then(() => getUser().refresh())}
-						>Sign out</Button
-					></Popover.Content
-				>
-			</Popover.Root>
+			<DropdownMenu.Root>
+				<DropdownMenu.Trigger class={buttonVariants()}>{user.name}</DropdownMenu.Trigger>
+				<DropdownMenu.Content>
+					<DropdownMenu.Group>
+						<DropdownMenu.Label>Profile</DropdownMenu.Label>
+						<DropdownMenu.Separator />
+						<DropdownMenu.Item
+							variant="destructive"
+							onclick={async () => await authClient.signOut().then(() => getUser().refresh())}
+							>Sign out</DropdownMenu.Item
+						>
+					</DropdownMenu.Group>
+				</DropdownMenu.Content>
+			</DropdownMenu.Root>
 		{:else}
 			<Button
 				onclick={async () =>

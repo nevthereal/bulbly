@@ -33,3 +33,5 @@ export const file = pgTable('file', {
 		.notNull()
 		.references(() => project.id, { onDelete: 'cascade' })
 });
+
+export type File = typeof file.$inferSelect;

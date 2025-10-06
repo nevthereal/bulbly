@@ -1,9 +1,10 @@
-import { form, query } from '$app/server';
+import { command, form, query } from '$app/server';
 import { z } from 'zod';
 import { db } from '$lib/server/db';
 import { error, redirect } from '@sveltejs/kit';
 import { getUser } from './auth.remote';
-import { project, subject } from '$lib/server/db/schema';
+import { file, project, subject } from '$lib/server/db/schema';
+import { eq } from 'drizzle-orm';
 
 export const getSubjectsWithProjects = query(async () => {
 	const user = await getUser();
@@ -57,6 +58,18 @@ export const getProject = query(z.uuid(), async (id) => {
 	return project;
 });
 
+export const getFiles = query(z.uuid(), async (projectId) => {
+	const user = await getUser();
+	if (!user) return error(401);
+
+	const files = await db.query.file.findMany({
+		where: {
+			projectId
+		}
+	});
+	return files;
+});
+
 export const createProject = form(
 	z.object({ title: z.string(), subjectId: z.uuid() }),
 	async ({ title, subjectId }) => {
@@ -83,4 +96,13 @@ export const createSubject = form(z.object({ title: z.string() }), async ({ titl
 		title,
 		userId: user.id
 	});
+});
+
+export const deleteFile = command(z.uuid(), async (fileId) => {
+	const user = await getUser();
+	if (!user) return;
+
+	const deletedFile = await db.delete(file).where(eq(file.id, fileId)).returning();
+
+	await getFiles(deletedFile[0].projectId).refresh();
 });
