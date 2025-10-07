@@ -64,14 +64,14 @@
 								<DropdownMenu.Group>
 									<DropdownMenu.Label>File</DropdownMenu.Label>
 									<DropdownMenu.Separator />
-									<DropdownMenu.Item
-										><a href={file.utURL} target="_blank">Open file link</a></DropdownMenu.Item
-									>
 
 									<DropdownMenu.Item onclick={() => attachments.add(file)}
 										>Add file to Chat</DropdownMenu.Item
 									>
 
+									<DropdownMenu.Item
+										><a href={file.utURL} target="_blank">Open file link</a></DropdownMenu.Item
+									>
 									<DropdownMenu.Item
 										onclick={async () => await deleteFile(file.id)}
 										variant="destructive">Delete File</DropdownMenu.Item

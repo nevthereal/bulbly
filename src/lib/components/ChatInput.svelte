@@ -23,6 +23,7 @@
 			}))
 		});
 		input = '';
+		attachments.clear();
 	}
 </script>
 

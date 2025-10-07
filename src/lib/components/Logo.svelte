@@ -5,7 +5,7 @@
 	height="64"
 	class="logo"
 >
-	<title>Auri – Golden Lightbulb with Smile</title>
+	<title>Bulbly</title>
 	<defs>
 		<!-- Gold glass -->
 		<radialGradient id="glass-grad" cx="40%" cy="32%" r="65%">

@@ -15,7 +15,7 @@ class Attachments {
 		this.attachments = this.attachments.filter((a) => a.id != id);
 	}
 
-	reset() {
+	clear() {
 		this.attachments = [];
 	}
 }

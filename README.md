@@ -1,4 +1,4 @@
-# AURI
+# Bulbly
 
 ## Todo:
 should have

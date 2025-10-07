@@ -24,7 +24,7 @@
 <ModeWatcher defaultMode="dark" />
 
 <nav class="flex h-[10dvh] items-center justify-between px-4">
-	<a href="/" class="flex items-center text-3xl font-black tracking-tighter"><Logo /> AURI</a>
+	<a href="/" class="flex items-center text-3xl font-black tracking-tighter"><Logo /> bulbly</a>
 	<div class="flex items-center gap-2">
 		{#if user}
 			<DropdownMenu.Root>
