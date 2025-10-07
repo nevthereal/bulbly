@@ -22,12 +22,12 @@
 	<form {...createProject}>
 		<div>
 			<Label for="title" class="mb-1">Name</Label>
-			<Input name={createProject.field('title')} />
+			<Input name="title" />
 		</div>
 		<div class="mt-4">
 			<Label for="title" class="mb-1">Subject/Class</Label>
 			<div class="flex gap-2">
-				<Select.Root type="single" bind:value name={createProject.field('subjectId')}>
+				<Select.Root type="single" bind:value name="subjectId">
 					<Select.Trigger class="w-full">{triggerContent}</Select.Trigger>
 					<Select.Content>
 						{#each await getSubjects() as sub (sub.id)}

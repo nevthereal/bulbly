@@ -1,3 +1,4 @@
+import { UTApi } from 'uploadthing/server';
 import { getUser } from '$lib/remote/auth.remote';
 import { file } from './db/schema';
 import { error } from '@sveltejs/kit';
@@ -5,6 +6,7 @@ import { createUploadthing } from 'uploadthing/server';
 import type { FileRouter } from 'uploadthing/server';
 import { db } from './db';
 import { getRequestEvent } from '$app/server';
+import { UPLOADTHING_TOKEN } from '$env/static/private';
 
 const f = createUploadthing();
 
@@ -46,9 +48,14 @@ export const myRouter = {
 				type: uploadedFile.type,
 				utURL: uploadedFile.ufsUrl,
 				name: uploadedFile.name,
-				ownerId: metadata.userId
+				ownerId: metadata.userId,
+				utKey: uploadedFile.key
 			});
 		})
 } satisfies FileRouter;
 
 export type MyRouter = typeof myRouter;
+
+export const utapi = new UTApi({
+	token: UPLOADTHING_TOKEN
+});

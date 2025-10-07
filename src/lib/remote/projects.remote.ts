@@ -5,6 +5,7 @@ import { error, redirect } from '@sveltejs/kit';
 import { getUser } from './auth.remote';
 import { file, project, subject } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
+import { utapi } from '$lib/server/uploadthing';
 
 export const getSubjectsWithProjects = query(async () => {
 	const user = await getUser();
@@ -103,6 +104,8 @@ export const deleteFile = command(z.uuid(), async (fileId) => {
 	if (!user) return;
 
 	const deletedFile = await db.delete(file).where(eq(file.id, fileId)).returning();
+
+	await utapi.deleteFiles(deletedFile.map((f) => f.utKey));
 
 	await getFiles(deletedFile[0].projectId).refresh();
 });

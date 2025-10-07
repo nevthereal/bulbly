@@ -28,6 +28,7 @@ export const file = pgTable('file', {
 		.references(() => user.id, { onDelete: 'cascade' })
 		.notNull(),
 	utURL: text().notNull(),
+	utKey: text().notNull(),
 	type: text().notNull(),
 	projectId: uuid()
 		.notNull()

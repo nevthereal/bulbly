@@ -48,15 +48,15 @@
 	<div class="mb-2 flex-1 overflow-y-auto">
 		<ul class="grid grid-cols-2 gap-2">
 			{#each files as file (file.id)}
-				{@const slicedName = file.name.slice(0, 12)}
+				{@const slicedName = file.name.slice(0, 20)}
 				<li class="flex flex-col justify-between gap-2 rounded-md border p-2">
-					<div class="relative">
+					<div class="relative h-full">
 						<DropdownMenu.Root>
 							<DropdownMenu.Trigger
 								class={buttonVariants({
 									class: 'absolute top-2 right-2',
 									size: 'icon',
-									variant: 'outline'
+									variant: 'secondary'
 								})}><Ellipsis /></DropdownMenu.Trigger
 							>
 							<DropdownMenu.Content>
