@@ -20,8 +20,12 @@
 					<div>
 						{#each message.parts as part, partIndex (partIndex)}
 							{#if part.type === 'text'}
-								<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-								<div class="prose prose-neutral">{@html marked(part.text)}</div>
+								<!-- eslint-disable svelte/no-at-html-tags -->
+								<div class="prose dark:prose-invert">
+									{@html marked(part.text)}
+								</div>
+							{:else if part.type === 'file'}
+								<p>{part.filename}</p>
 							{/if}
 						{/each}
 					</div>

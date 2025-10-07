@@ -1,5 +1,13 @@
 <script lang="ts">
-	import { Ellipsis, FileText, Trash2, Upload, Workflow } from '@lucide/svelte';
+	import {
+		CircleFadingPlus,
+		Ellipsis,
+		FileText,
+		SquareArrowOutUpRight,
+		Trash2,
+		Upload,
+		Workflow
+	} from '@lucide/svelte';
 
 	import Input from './ui/input/input.svelte';
 	import Button, { buttonVariants } from './ui/button/button.svelte';
@@ -66,15 +74,16 @@
 									<DropdownMenu.Separator />
 
 									<DropdownMenu.Item onclick={() => attachments.add(file)}
-										>Add file to Chat</DropdownMenu.Item
+										><CircleFadingPlus /> Add file to Chat</DropdownMenu.Item
 									>
 
 									<DropdownMenu.Item
-										><a href={file.utURL} target="_blank">Open file link</a></DropdownMenu.Item
+										><SquareArrowOutUpRight /><a href={file.utURL} target="_blank">Open file</a
+										></DropdownMenu.Item
 									>
 									<DropdownMenu.Item
 										onclick={async () => await deleteFile(file.id)}
-										variant="destructive">Delete File</DropdownMenu.Item
+										variant="destructive"><Trash2 />Delete File</DropdownMenu.Item
 									>
 								</DropdownMenu.Group>
 							</DropdownMenu.Content>
@@ -88,8 +97,8 @@
 							</div>
 						{/if}
 					</div>
-					<Tooltip.Provider delayDuration={100}>
-						<Tooltip.Root>
+					<Tooltip.Provider>
+						<Tooltip.Root delayDuration={100}>
 							<Tooltip.Trigger class="overflow-x-scroll font-mono text-xs"
 								>{#if slicedName.length < file.name.length}
 									{slicedName}…

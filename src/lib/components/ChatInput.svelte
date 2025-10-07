@@ -1,7 +1,8 @@
 <script lang="ts">
-	import { ArrowUpIcon, PlusIcon, Trash2 } from '@lucide/svelte';
+	import { ArrowUpIcon, Ellipsis, Info, Trash2 } from '@lucide/svelte';
 	import * as InputGroup from '$lib/components/ui/input-group/index.js';
-	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
+	import * as ButtonGroup from '$lib/components/ui/button-group/index.js';
+	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 
 	import { attachments } from '$lib/attachments.svelte';
 
@@ -30,22 +31,31 @@
 <form onsubmit={handleSubmit}>
 	<InputGroup.Root>
 		<InputGroup.Input bind:value={input} placeholder="Ask, Search or Chat..." />
-		<InputGroup.Addon align="block-end">
-			<InputGroup.Button variant="outline" class="rounded-full" size="icon-xs">
-				<PlusIcon />
-			</InputGroup.Button>
-			<InputGroup.Addon class="flex gap-2">
-				{#each attachments.files as att (att.id)}
-					<InputGroup.Text>
+		<InputGroup.Addon class="h-16" align="block-end">
+			{#each attachments.files as att (att.id)}
+				<ButtonGroup.Root>
+					<ButtonGroup.Text>
 						{att.name}
-						<InputGroup.Button size="icon-sm" onclick={() => attachments.remove(att.id)}
-							><Trash2 /></InputGroup.Button
-						>
-					</InputGroup.Text>
-				{:else}
-					<InputGroup.Text>No files in Context</InputGroup.Text>
-				{/each}
-			</InputGroup.Addon>
+					</ButtonGroup.Text>
+					<InputGroup.Button
+						variant="destructive"
+						size="icon-xs"
+						onclick={() => attachments.remove(att.id)}><Trash2 /></InputGroup.Button
+					>
+				</ButtonGroup.Root>
+			{:else}
+				<InputGroup.Text
+					>No files in Chat<Tooltip.Provider>
+						<Tooltip.Root delayDuration={100}>
+							<Tooltip.Trigger><Info /></Tooltip.Trigger>
+							<Tooltip.Content class="flex">
+								Tap on the <Ellipsis class="h-lh" /> of a file to add it to the chat
+							</Tooltip.Content>
+						</Tooltip.Root>
+					</Tooltip.Provider></InputGroup.Text
+				>
+			{/each}
+
 			<InputGroup.Button
 				variant="default"
 				class="ml-auto rounded-full"
