@@ -44,7 +44,7 @@
 		"svelte-check": "^4.0.0",
 		"svelte-sonner": "^1.0.5",
 		"tailwind-merge": "^3.3.1",
-		"tailwind-variants": "^1.0.0",
+		"tailwind-variants": "^3.1.1",
 		"tailwindcss": "^4.0.0",
 		"tw-animate-css": "^1.3.7",
 		"typescript": "^5.0.0",
@@ -54,12 +54,14 @@
 	},
 	"dependencies": {
 		"@ai-sdk/gateway": "^1.0.33",
+		"@ai-sdk/openai": "^2.0.44",
 		"@ai-sdk/svelte": "^3.0.60",
 		"@neondatabase/serverless": "^0.10.4",
 		"@uploadthing/svelte": "^7.3.3",
 		"ai": "^5.0.60",
 		"better-auth": "^1.3.7",
 		"drizzle-orm": "1.0.0-beta.1-fd8bfcc",
+		"marked": "^16.4.0",
 		"mode-watcher": "^1.1.0",
 		"uploadthing": "^7.7.4",
 		"zod": "^4.1.11"

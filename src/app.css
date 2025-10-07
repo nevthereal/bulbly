@@ -1,5 +1,5 @@
 @import 'tailwindcss';
-
+@plugin "@tailwindcss/typography";
 @import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
@@ -117,5 +117,89 @@
 	}
 	body {
 		@apply bg-background text-foreground;
+	}
+}
+
+@layer components {
+	.prose-custom {
+		@apply prose max-w-none prose-neutral;
+	}
+
+	/* Base text */
+	.prose-custom :where(p):not(:first-child) {
+		@apply mt-6;
+	}
+	.prose-custom {
+		@apply text-base leading-7;
+	}
+
+	/* Muted paragraph variant */
+	.prose-custom .text-muted-foreground {
+		@apply text-xl leading-7 text-muted-foreground;
+	}
+
+	/* Links */
+	.prose-custom :where(a) {
+		@apply font-medium text-primary underline underline-offset-4;
+	}
+
+	/* H1 */
+	.prose-custom :where(h1) {
+		@apply scroll-m-20 text-4xl font-extrabold tracking-tight text-balance;
+	}
+
+	/* H2 */
+	.prose-custom :where(h2) {
+		@apply mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0;
+	}
+
+	/* H3 */
+	.prose-custom :where(h3) {
+		@apply mt-8 scroll-m-20 text-2xl font-semibold tracking-tight;
+	}
+
+	/* Lists */
+	.prose-custom :where(ul) {
+		@apply my-6 ml-6 list-disc;
+	}
+	.prose-custom :where(ul > li) {
+		@apply mt-2;
+	}
+
+	/* Blockquote */
+	.prose-custom :where(blockquote) {
+		@apply mt-6 border-l-2 pl-6 italic;
+	}
+
+	/* Table wrapper (scroll container) */
+	.prose-custom .table-wrap {
+		@apply my-6 w-full overflow-y-auto;
+	}
+
+	/* Table */
+	.prose-custom :where(table) {
+		@apply w-full;
+	}
+	.prose-custom :where(thead th) {
+		@apply border px-4 py-2 text-left font-bold;
+	}
+	/* Respect align attribute like your [&[align=…]] utilities */
+	.prose-custom :where(th[align='center'], td[align='center']) {
+		@apply text-center;
+	}
+	.prose-custom :where(th[align='right'], td[align='right']) {
+		@apply text-right;
+	}
+
+	.prose-custom :where(tbody td) {
+		@apply border px-4 py-2 text-left;
+	}
+
+	/* Row stripes and borders similar to your tr classes */
+	.prose-custom :where(thead tr, tbody tr) {
+		@apply m-0 border-t p-0;
+	}
+	.prose-custom :where(tbody tr:nth-child(even)) {
+		@apply bg-muted;
 	}
 }

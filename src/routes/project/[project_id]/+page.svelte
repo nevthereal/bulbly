@@ -12,6 +12,6 @@
 	<h1 class="mb-4 ml-4 text-3xl font-bold">{project.name}</h1>
 	<div class="flex h-full gap-4 overflow-scroll">
 		<KnowledgeBase projectId={params.project_id} />
-		<DocumentChat />
+		<DocumentChat projectId={params.project_id} />
 	</div>
 </main>

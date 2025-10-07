@@ -12,6 +12,7 @@
 	import type { MyRouter } from '$lib/server/uploadthing';
 	import { deleteFile, getFiles } from '$lib/remote/projects.remote';
 	import { toast } from 'svelte-sonner';
+	import { attachments } from '$lib/attachments.svelte';
 
 	let filesToBeUploaded: FileList | undefined = $state(undefined);
 	let uploadProgress: number | null = $state(null);
@@ -56,7 +57,7 @@
 								class={buttonVariants({
 									class: 'absolute top-2 right-2',
 									size: 'icon',
-									variant: 'secondary'
+									variant: 'ghost'
 								})}><Ellipsis /></DropdownMenu.Trigger
 							>
 							<DropdownMenu.Content>
@@ -66,6 +67,11 @@
 									<DropdownMenu.Item
 										><a href={file.utURL} target="_blank">Open file link</a></DropdownMenu.Item
 									>
+
+									<DropdownMenu.Item onclick={() => attachments.add(file)}
+										>Add file to Chat</DropdownMenu.Item
+									>
+
 									<DropdownMenu.Item
 										onclick={async () => await deleteFile(file.id)}
 										variant="destructive">Delete File</DropdownMenu.Item

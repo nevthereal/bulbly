@@ -1,8 +1,10 @@
 <script lang="ts">
+	import Button from '$lib/components/ui/button/button.svelte';
 	import { getUser } from '$lib/remote/auth.remote';
 	import { getSubjectsWithProjects } from '$lib/remote/projects.remote';
 </script>
 
+<Button variant="link" href="/create">Create project</Button>
 {#if await getUser()}
 	{#each await getSubjectsWithProjects() as sub (sub.id)}
 		<h1 class="text-xl">{sub.title}:</h1>
