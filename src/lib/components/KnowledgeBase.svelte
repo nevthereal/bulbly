@@ -53,7 +53,7 @@
 		<Workflow /> Knowledge Base
 	</h1>
 
-	<h2 class="py-2 font-medium">Your files:</h2>
+	<h2 class="my-2 font-medium">Your files:</h2>
 	<div class="mb-2 flex-1 overflow-y-auto">
 		<ul class="grid grid-cols-2 gap-2">
 			{#each files as file (file.id)}
@@ -65,7 +65,7 @@
 								class={buttonVariants({
 									class: 'absolute top-2 right-2',
 									size: 'icon',
-									variant: 'ghost'
+									variant: 'secondary'
 								})}><Ellipsis /></DropdownMenu.Trigger
 							>
 							<DropdownMenu.Content>

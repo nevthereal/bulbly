@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { marked } from 'marked';
 	import { MessageCircle } from '@lucide/svelte';
 	import ChatInput from './ChatInput.svelte';
 	import { Chat } from '@ai-sdk/svelte';
+	import Message from './Message.svelte';
 
 	let { projectId }: { projectId: string } = $props();
 	const chat = new Chat({ id: `${projectId}-chat` });
@@ -12,26 +12,12 @@
 	<h1 class="flex min-h-0 items-center gap-2 border-b pb-2 text-2xl font-semibold">
 		<MessageCircle /> Document Chat
 	</h1>
-	<div class="my-4 flex h-full min-h-0 flex-col gap-2">
-		<div class="min-h-0 flex-1 overflow-y-auto">
+	<div class="mt-4 flex h-full min-h-0 flex-col gap-2">
+		<ul class="flex min-h-0 flex-1 flex-col gap-8 overflow-y-auto">
 			{#each chat.messages as message, messageIndex (messageIndex)}
-				<li>
-					<div>{message.role}</div>
-					<div>
-						{#each message.parts as part, partIndex (partIndex)}
-							{#if part.type === 'text'}
-								<!-- eslint-disable svelte/no-at-html-tags -->
-								<div class="prose dark:prose-invert">
-									{@html marked(part.text)}
-								</div>
-							{:else if part.type === 'file'}
-								<p>{part.filename}</p>
-							{/if}
-						{/each}
-					</div>
-				</li>
+				<Message {message} />
 			{/each}
-		</div>
+		</ul>
 		<ChatInput {chat} />
 	</div>
 </div>

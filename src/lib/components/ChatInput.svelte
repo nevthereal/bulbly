@@ -7,6 +7,7 @@
 	import { attachments } from '$lib/attachments.svelte';
 
 	import { Chat } from '@ai-sdk/svelte';
+	import Spinner from './ui/spinner/spinner.svelte';
 
 	let { chat }: { chat: Chat } = $props();
 
@@ -62,8 +63,12 @@
 				size="icon-xs"
 				disabled={!input}
 			>
-				<ArrowUpIcon />
-				<span class="sr-only">Send</span>
+				{#if chat.status === 'ready'}
+					<ArrowUpIcon />
+					<span class="sr-only">Send</span>
+				{:else}
+					<Spinner />
+				{/if}
 			</InputGroup.Button>
 		</InputGroup.Addon>
 	</InputGroup.Root>
