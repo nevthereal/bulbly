@@ -1,8 +1,8 @@
 <script lang="ts">
+	import Logo from '$lib/assets/logo.png';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 
 	import { Toaster } from '$lib/components/ui/sonner/index.js';
-	import Logo from '$lib/components/Logo.svelte';
 	import { ModeWatcher } from 'mode-watcher';
 	import '../app.css';
 	import { authClient } from '$lib/auth-client';
@@ -24,7 +24,9 @@
 <ModeWatcher defaultMode="dark" />
 
 <nav class="flex h-[10dvh] items-center justify-between px-4">
-	<a href="/" class="flex items-center text-3xl font-black tracking-tighter"><Logo /> bulbly</a>
+	<a href="/" class="flex items-center text-3xl font-black tracking-tighter"
+		><img src={Logo} alt="logo" class="mr-2 h-lh" /> bulbly</a
+	>
 	<div class="flex items-center gap-2">
 		{#if user}
 			<DropdownMenu.Root>

@@ -20,7 +20,7 @@
 	import type { MyRouter } from '$lib/server/uploadthing';
 	import { deleteFile, getFiles } from '$lib/remote/projects.remote';
 	import { toast } from 'svelte-sonner';
-	import { attachments } from '$lib/attachments.svelte';
+	import { attachments } from '$lib/chat.svelte';
 
 	let filesToBeUploaded: FileList | undefined = $state(undefined);
 	let uploadProgress: number | null = $state(null);

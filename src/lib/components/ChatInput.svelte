@@ -1,13 +1,15 @@
 <script lang="ts">
-	import { ArrowUpIcon, Ellipsis, Info, Trash2 } from '@lucide/svelte';
+	import { ArrowUpIcon, Ellipsis, GraduationCap, Info, Trash2 } from '@lucide/svelte';
 	import * as InputGroup from '$lib/components/ui/input-group/index.js';
 	import * as ButtonGroup from '$lib/components/ui/button-group/index.js';
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 
-	import { attachments } from '$lib/attachments.svelte';
+	import { attachments } from '$lib/chat.svelte';
 
 	import { Chat } from '@ai-sdk/svelte';
 	import Spinner from './ui/spinner/spinner.svelte';
+	import Toggle from './ui/toggle/toggle.svelte';
+	import { getStudyMode, toggleStudyMode } from '$lib/remote/chat.remote';
 
 	let { chat }: { chat: Chat } = $props();
 
@@ -32,31 +34,38 @@
 <form onsubmit={handleSubmit}>
 	<InputGroup.Root>
 		<InputGroup.Input bind:value={input} placeholder="Ask, Search or Chat..." />
-		<InputGroup.Addon class="h-16" align="block-end">
-			{#each attachments.files as att (att.id)}
-				<ButtonGroup.Root>
-					<ButtonGroup.Text>
-						{att.name}
-					</ButtonGroup.Text>
-					<InputGroup.Button
-						variant="destructive"
-						size="icon-xs"
-						onclick={() => attachments.remove(att.id)}><Trash2 /></InputGroup.Button
+		{#if attachments.files.length != 0}
+			<InputGroup.Addon align="block-start">
+				{#each attachments.files as att (att.id)}
+					<ButtonGroup.Root>
+						<ButtonGroup.Text>
+							{att.name}
+						</ButtonGroup.Text>
+						<InputGroup.Button
+							variant="destructive"
+							size="icon-xs"
+							onclick={() => attachments.remove(att.id)}><Trash2 /></InputGroup.Button
+						>
+					</ButtonGroup.Root>
+				{:else}
+					<InputGroup.Text
+						>No files in Chat<Tooltip.Provider>
+							<Tooltip.Root delayDuration={100}>
+								<Tooltip.Trigger><Info /></Tooltip.Trigger>
+								<Tooltip.Content class="flex">
+									Tap on the <Ellipsis class="h-lh" /> of a file to add it to the chat
+								</Tooltip.Content>
+							</Tooltip.Root>
+						</Tooltip.Provider></InputGroup.Text
 					>
-				</ButtonGroup.Root>
-			{:else}
-				<InputGroup.Text
-					>No files in Chat<Tooltip.Provider>
-						<Tooltip.Root delayDuration={100}>
-							<Tooltip.Trigger><Info /></Tooltip.Trigger>
-							<Tooltip.Content class="flex">
-								Tap on the <Ellipsis class="h-lh" /> of a file to add it to the chat
-							</Tooltip.Content>
-						</Tooltip.Root>
-					</Tooltip.Provider></InputGroup.Text
-				>
-			{/each}
-
+				{/each}
+			</InputGroup.Addon>
+		{/if}
+		<InputGroup.Addon align="block-end">
+			<Toggle
+				bind:pressed={() => getStudyMode().current ?? false, async () => await toggleStudyMode()}
+				variant="outline"><GraduationCap /> Study mode</Toggle
+			>
 			<InputGroup.Button
 				variant="default"
 				class="ml-auto rounded-full"
