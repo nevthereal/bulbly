@@ -1,7 +1,7 @@
 import { VERCEL_AI_KEY } from '$env/static/private';
-import { chatConfigSchema } from '$lib/zod.js';
+import type { chatConfig } from '$lib/chat.svelte.js';
 import { createGateway } from '@ai-sdk/gateway';
-import { streamText, type UIMessage, convertToModelMessages } from 'ai';
+import { streamText, convertToModelMessages, type UIMessage } from 'ai';
 
 const gateway = createGateway({
 	apiKey: VERCEL_AI_KEY
@@ -71,14 +71,13 @@ END OF STUDY MODE SYSTEM PROMPT
 `;
 
 export async function POST({ request }) {
-	const { messages }: { messages: UIMessage[] } = await request.json();
-
-	const { studyMode } = chatConfigSchema.parse(JSON.parse(request.headers.get('config') ?? ''));
+	const { messages, config }: { messages: UIMessage[]; config: typeof chatConfig.current } =
+		await request.json();
 
 	const result = streamText({
 		model: gateway('openai/gpt-5-mini'),
 		messages: convertToModelMessages(messages),
-		system: studyMode ? DEFAULT_SYS_PROMPT + STUDY_MODE_PROMPT : DEFAULT_SYS_PROMPT
+		system: config.studyModeEnabled ? DEFAULT_SYS_PROMPT + STUDY_MODE_PROMPT : DEFAULT_SYS_PROMPT
 	});
 
 	return result.toUIMessageStreamResponse();

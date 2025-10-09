@@ -4,12 +4,11 @@
 	import * as ButtonGroup from '$lib/components/ui/button-group/index.js';
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 
-	import { attachments, studyMode } from '$lib/chat.svelte';
+	import { attachments, chatConfig } from '$lib/chat.svelte';
 
 	import { Chat } from '@ai-sdk/svelte';
 	import Spinner from './ui/spinner/spinner.svelte';
 	import Toggle from './ui/toggle/toggle.svelte';
-	import { chatConfigSchema } from '$lib/zod';
 
 	let { chat }: { chat: Chat } = $props();
 
@@ -27,11 +26,7 @@
 					filename: a.name
 				}))
 			},
-			{
-				headers: {
-					config: JSON.stringify(chatConfigSchema.parse({ studyMode: studyMode.current }))
-				}
-			}
+			{ body: { config: chatConfig.current } }
 		);
 		input = '';
 		attachments.clear();
@@ -70,7 +65,10 @@
 		{/if}
 		<InputGroup.Addon align="block-end">
 			<Toggle
-				bind:pressed={() => studyMode.current, (v) => (studyMode.current = v)}
+				bind:pressed={
+					() => chatConfig.current.studyModeEnabled,
+					(v) => (chatConfig.current.studyModeEnabled = v)
+				}
 				variant="outline"><GraduationCap />Enhanced mode</Toggle
 			>
 			<InputGroup.Button

@@ -23,4 +23,4 @@ class Attachments {
 
 export const attachments = new Attachments();
 
-export const studyMode = new PersistedState('study-mode-enabled', false);
+export const chatConfig = new PersistedState('chat-config', { studyModeEnabled: false });
