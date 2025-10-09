@@ -1,3 +1,4 @@
+import { PersistedState } from 'runed';
 import type { File } from './server/db/schema';
 
 class Attachments {
@@ -21,3 +22,5 @@ class Attachments {
 }
 
 export const attachments = new Attachments();
+
+export const studyMode = new PersistedState('study-mode-enabled', false);

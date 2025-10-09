@@ -4,12 +4,12 @@
 	import * as ButtonGroup from '$lib/components/ui/button-group/index.js';
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 
-	import { attachments } from '$lib/chat.svelte';
+	import { attachments, studyMode } from '$lib/chat.svelte';
 
 	import { Chat } from '@ai-sdk/svelte';
 	import Spinner from './ui/spinner/spinner.svelte';
 	import Toggle from './ui/toggle/toggle.svelte';
-	import { getStudyMode, toggleStudyMode } from '$lib/remote/chat.remote';
+	import { chatConfigSchema } from '$lib/zod';
 
 	let { chat }: { chat: Chat } = $props();
 
@@ -17,15 +17,22 @@
 
 	function handleSubmit(event: SubmitEvent) {
 		event.preventDefault();
-		chat.sendMessage({
-			text: input,
-			files: attachments.files.map((a) => ({
-				mediaType: a.type,
-				type: 'file',
-				url: a.utURL,
-				filename: a.name
-			}))
-		});
+		chat.sendMessage(
+			{
+				text: input,
+				files: attachments.files.map((a) => ({
+					mediaType: a.type,
+					type: 'file',
+					url: a.utURL,
+					filename: a.name
+				}))
+			},
+			{
+				headers: {
+					config: JSON.stringify(chatConfigSchema.parse({ studyMode: studyMode.current }))
+				}
+			}
+		);
 		input = '';
 		attachments.clear();
 	}
@@ -63,8 +70,8 @@
 		{/if}
 		<InputGroup.Addon align="block-end">
 			<Toggle
-				bind:pressed={() => getStudyMode().current ?? false, async () => await toggleStudyMode()}
-				variant="outline"><GraduationCap /> Study mode</Toggle
+				bind:pressed={() => studyMode.current, (v) => (studyMode.current = v)}
+				variant="outline"><GraduationCap />Enhanced mode</Toggle
 			>
 			<InputGroup.Button
 				variant="default"
