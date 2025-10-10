@@ -3,6 +3,7 @@
 	import ChatInput from './ChatInput.svelte';
 	import { Chat } from '@ai-sdk/svelte';
 	import Message from './Message.svelte';
+	import Spinner from './ui/spinner/spinner.svelte';
 
 	let { projectId }: { projectId: string } = $props();
 	const chat = new Chat({ id: `${projectId}-chat` });
@@ -17,6 +18,11 @@
 			{#each chat.messages as message, messageIndex (messageIndex)}
 				<Message {message} />
 			{/each}
+			{#if chat.status === 'submitted'}
+				<p class="flex items-center gap-2 font-medium text-muted-foreground">
+					<Spinner /> Loading message
+				</p>
+			{/if}
 		</ul>
 		<ChatInput {chat} />
 	</div>
