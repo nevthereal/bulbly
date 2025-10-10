@@ -59,9 +59,8 @@ export const getProject = query(z.uuid(), async (id) => {
 	return project;
 });
 
-export const getFiles = query(z.uuid(), async (projectId) => {
-	const user = await getUser();
-	if (!user) error(401, 'Not signed in');
+export const getFiles = query(z.string(), async (projectId) => {
+	await getUser();
 
 	const files = await db.query.file.findMany({
 		where: {

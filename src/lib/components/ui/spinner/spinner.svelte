@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { cn } from '$lib/utils.js';
-	import { LoaderIcon } from '@lucide/svelte';
+	import { LoaderCircle } from '@lucide/svelte';
 	import type { ComponentProps } from 'svelte';
 
-	type Props = ComponentProps<typeof LoaderIcon>;
+	type Props = ComponentProps<typeof LoaderCircle>;
 
 	let { class: className, ...restProps }: Props = $props();
 </script>
 
-<LoaderIcon
+<LoaderCircle
 	role="status"
 	aria-label="Loading"
 	class={cn('size-4 animate-spin', className)}

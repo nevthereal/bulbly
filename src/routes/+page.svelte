@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Loading from '$lib/components/Loading.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { getUser } from '$lib/remote/auth.remote';
 	import { getSubjectsWithProjects } from '$lib/remote/projects.remote';
@@ -16,6 +17,9 @@
 	{:else}
 		<p>Sign in above</p>
 	{/if}
+	{#snippet pending()}
+		<Loading thing="Projects" />
+	{/snippet}
 	{#snippet failed()}
 		<p>Something went wrong here.</p>
 	{/snippet}
