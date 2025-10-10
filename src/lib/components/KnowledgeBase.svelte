@@ -22,6 +22,7 @@
 	import { toast } from 'svelte-sonner';
 	import { attachments } from '$lib/chat.svelte';
 	import Loading from './Loading.svelte';
+	import { browser } from '$app/environment';
 
 	let filesToBeUploaded: FileList | undefined = $state(undefined);
 	let uploadProgress: number | null = $state(null);
@@ -53,73 +54,75 @@
 	</h1>
 	<h2 class="my-2 font-medium">Your files:</h2>
 	<div class="mb-2 flex-1 overflow-y-auto">
-		<svelte:boundary>
-			{#snippet pending()}
-				<Loading thing="files" />
-			{/snippet}
-			{#snippet failed()}
-				wtf
-			{/snippet}
-			<ul class="grid grid-cols-2 gap-2">
-				{#each await getFiles(projectId) as file (file.id)}
-					{@const slicedName = file.name.slice(0, 20)}
-					<li class="flex flex-col justify-between gap-2 rounded-md border p-2">
-						<div class="relative h-full">
-							<DropdownMenu.Root>
-								<DropdownMenu.Trigger
-									class={buttonVariants({
-										class: 'absolute top-2 right-2',
-										size: 'icon',
-										variant: 'secondary'
-									})}><Ellipsis /></DropdownMenu.Trigger
-								>
-								<DropdownMenu.Content>
-									<DropdownMenu.Group>
-										<DropdownMenu.Label>File</DropdownMenu.Label>
-										<DropdownMenu.Separator />
+		{#if browser}
+			<svelte:boundary>
+				{#snippet pending()}
+					<Loading thing="files" />
+				{/snippet}
+				{#snippet failed(e)}
+					{e}
+				{/snippet}
+				<ul class="grid grid-cols-2 gap-2">
+					{#each await getFiles(projectId) as file (file.id)}
+						{@const slicedName = file.name.slice(0, 20)}
+						<li class="flex flex-col justify-between gap-2 rounded-md border p-2">
+							<div class="relative h-full">
+								<DropdownMenu.Root>
+									<DropdownMenu.Trigger
+										class={buttonVariants({
+											class: 'absolute top-2 right-2',
+											size: 'icon',
+											variant: 'secondary'
+										})}><Ellipsis /></DropdownMenu.Trigger
+									>
+									<DropdownMenu.Content>
+										<DropdownMenu.Group>
+											<DropdownMenu.Label>File</DropdownMenu.Label>
+											<DropdownMenu.Separator />
 
-										<DropdownMenu.Item onclick={() => attachments.add(file)}
-											><CircleFadingPlus /> Add file to Chat</DropdownMenu.Item
-										>
+											<DropdownMenu.Item onclick={() => attachments.add(file)}
+												><CircleFadingPlus /> Add file to Chat</DropdownMenu.Item
+											>
 
-										<DropdownMenu.Item
-											><SquareArrowOutUpRight /><a href={file.utURL} target="_blank">Open file</a
-											></DropdownMenu.Item
-										>
-										<DropdownMenu.Item
-											onclick={async () => await deleteFile(file.id)}
-											variant="destructive"><Trash2 />Delete File</DropdownMenu.Item
-										>
-									</DropdownMenu.Group>
-								</DropdownMenu.Content>
-							</DropdownMenu.Root>
+											<DropdownMenu.Item
+												><SquareArrowOutUpRight /><a href={file.utURL} target="_blank">Open file</a
+												></DropdownMenu.Item
+											>
+											<DropdownMenu.Item
+												onclick={async () => await deleteFile(file.id)}
+												variant="destructive"><Trash2 />Delete File</DropdownMenu.Item
+											>
+										</DropdownMenu.Group>
+									</DropdownMenu.Content>
+								</DropdownMenu.Root>
 
-							{#if file.type === 'image/jpeg' || file.type === 'image/png'}
-								<img src={file.utURL} alt="" class="rounded-sm" />
-							{:else if file.type === 'application/pdf'}
-								<div class="flex h-full items-center justify-center rounded-sm bg-muted">
-									<FileText class="size-20 text-muted-foreground" />
-								</div>
-							{/if}
-						</div>
-						<Tooltip.Provider>
-							<Tooltip.Root delayDuration={100}>
-								<Tooltip.Trigger class="overflow-x-scroll font-mono text-xs"
-									>{#if slicedName.length < file.name.length}
-										{slicedName}…
-									{:else}
-										{slicedName}
-									{/if}</Tooltip.Trigger
-								>
-								<Tooltip.Content>
-									<p>{file.name}</p>
-								</Tooltip.Content>
-							</Tooltip.Root>
-						</Tooltip.Provider>
-					</li>
-				{/each}
-			</ul>
-		</svelte:boundary>
+								{#if file.type === 'image/jpeg' || file.type === 'image/png'}
+									<img src={file.utURL} alt={file.name} class="rounded-sm" />
+								{:else if file.type === 'application/pdf'}
+									<div class="flex h-full items-center justify-center rounded-sm bg-muted">
+										<FileText class="size-20 text-muted-foreground" />
+									</div>
+								{/if}
+							</div>
+							<Tooltip.Provider>
+								<Tooltip.Root delayDuration={100}>
+									<Tooltip.Trigger class="overflow-x-scroll font-mono text-xs"
+										>{#if slicedName.length < file.name.length}
+											{slicedName}…
+										{:else}
+											{slicedName}
+										{/if}</Tooltip.Trigger
+									>
+									<Tooltip.Content>
+										<p>{file.name}</p>
+									</Tooltip.Content>
+								</Tooltip.Root>
+							</Tooltip.Provider>
+						</li>
+					{/each}
+				</ul>
+			</svelte:boundary>
+		{/if}
 	</div>
 	<Dialog.Root bind:open>
 		<Dialog.Trigger class={buttonVariants()}>Add files to Knowledge Base</Dialog.Trigger>
