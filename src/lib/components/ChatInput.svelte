@@ -33,7 +33,7 @@
 	}
 </script>
 
-<form onsubmit={handleSubmit} class="absolute bottom-0 z-10 w-fit">
+<form onsubmit={handleSubmit}>
 	<InputGroup.Root>
 		<InputGroup.Input bind:value={input} placeholder="Ask, Search or Chat..." />
 		{#if attachments.files.length != 0}
