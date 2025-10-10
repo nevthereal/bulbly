@@ -36,8 +36,8 @@ export const myRouter = {
 			const { project_id } = event.params;
 
 			// If you throw, the user will not be able to upload
-			if (!user) return error(401);
-			if (!project_id) return error(404);
+			if (!user) error(401, 'Not signed in');
+			if (!project_id) error(404, 'Project not found');
 
 			// Whatever is returned here is accessible in onUploadComplete as `metadata`
 			return { userId: user.id, prjId: project_id };

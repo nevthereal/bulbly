@@ -17,6 +17,7 @@
 
 <svelte:head>
 	<link rel="icon" href="/favicon.png" type="image/png" />
+	<title>Bulbly</title>
 </svelte:head>
 
 <Toaster />

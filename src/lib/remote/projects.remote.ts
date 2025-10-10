@@ -10,7 +10,7 @@ import { utapi } from '$lib/server/uploadthing';
 export const getSubjectsWithProjects = query(async () => {
 	const user = await getUser();
 
-	if (!user) return error(401);
+	if (!user) error(401, 'Not signed in');
 
 	const projects = await db.query.subject.findMany({
 		where: {
@@ -27,7 +27,7 @@ export const getSubjectsWithProjects = query(async () => {
 export const getSubjects = query(async () => {
 	const user = await getUser();
 
-	if (!user) return error(401);
+	if (!user) error(401, 'Not signed in');
 
 	const subjects = await db.query.subject.findMany({
 		where: {
@@ -42,7 +42,7 @@ export const getSubjects = query(async () => {
 export const getProject = query(z.uuid(), async (id) => {
 	const user = await getUser();
 
-	if (!user) return error(401);
+	if (!user) error(401, 'Not signed in');
 
 	const project = await db.query.project.findFirst({
 		where: {
@@ -54,14 +54,14 @@ export const getProject = query(z.uuid(), async (id) => {
 		}
 	});
 
-	if (!project) return error(404);
+	if (!project) error(404, 'Project not found');
 
 	return project;
 });
 
 export const getFiles = query(z.uuid(), async (projectId) => {
 	const user = await getUser();
-	if (!user) return error(401);
+	if (!user) error(401, 'Not signed in');
 
 	const files = await db.query.file.findMany({
 		where: {
@@ -75,7 +75,7 @@ export const createProject = form(
 	z.object({ title: z.string(), subjectId: z.uuid() }),
 	async ({ title, subjectId }) => {
 		const user = await getUser();
-		if (!user) return error(401);
+		if (!user) error(401, 'Not signed in');
 
 		const [{ id }] = await db
 			.insert(project)
