@@ -11,8 +11,6 @@
 	import ModeToggle from '$lib/components/ModeToggle.svelte';
 	import { goto } from '$app/navigation';
 	let { children } = $props();
-
-	const user = $derived(await getUser());
 </script>
 
 <svelte:head>
@@ -29,33 +27,38 @@
 		><img src={Logo} alt="logo" class="mr-2 h-lh" /> bulbly</a
 	>
 	<div class="flex items-center gap-2">
-		{#if user}
-			<DropdownMenu.Root>
-				<DropdownMenu.Trigger class={buttonVariants()}>{user.name}</DropdownMenu.Trigger>
-				<DropdownMenu.Content>
-					<DropdownMenu.Group>
-						<DropdownMenu.Label>Profile</DropdownMenu.Label>
-						<DropdownMenu.Separator />
-						<DropdownMenu.Item
-							variant="destructive"
-							onclick={async () =>
-								await authClient.signOut().then(() =>
-									getUser()
-										.refresh()
-										.then(() => goto('/'))
-								)}>Sign out</DropdownMenu.Item
-						>
-					</DropdownMenu.Group>
-				</DropdownMenu.Content>
-			</DropdownMenu.Root>
-		{:else}
-			<Button
-				onclick={async () =>
-					await authClient.signIn.social({
-						provider: 'google'
-					})}>sign in</Button
-			>
-		{/if}
+		<svelte:boundary>
+			{#snippet pending()}
+				<p>loading user</p>
+			{/snippet}
+			{#snippet failed()}
+				<p>failed to load user</p>
+			{/snippet}
+			{@const user = await getUser()}
+			{#if user}
+				<DropdownMenu.Root>
+					<DropdownMenu.Trigger class={buttonVariants()}>{user.name}</DropdownMenu.Trigger>
+					<DropdownMenu.Content>
+						<DropdownMenu.Group>
+							<DropdownMenu.Label>Profile</DropdownMenu.Label>
+							<DropdownMenu.Separator />
+							<DropdownMenu.Item
+								variant="destructive"
+								onclick={async () => await authClient.signOut().then(() => goto('/'))}
+								>Sign out</DropdownMenu.Item
+							>
+						</DropdownMenu.Group>
+					</DropdownMenu.Content>
+				</DropdownMenu.Root>
+			{:else}
+				<Button
+					onclick={async () =>
+						await authClient.signIn.social({
+							provider: 'google'
+						})}>sign in</Button
+				>
+			{/if}
+		</svelte:boundary>
 
 		<ModeToggle />
 	</div>
