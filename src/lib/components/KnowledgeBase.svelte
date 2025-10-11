@@ -23,6 +23,7 @@
 	import { attachments } from '$lib/chat.svelte';
 	import Loading from './Loading.svelte';
 	import { browser } from '$app/environment';
+	import { generatePermittedFileTypes } from 'uploadthing/client';
 
 	let filesToBeUploaded: FileList | undefined = $state(undefined);
 	let uploadProgress: number | null = $state(null);
@@ -34,7 +35,7 @@
 		url: `/project/${projectId}/upload`
 	});
 
-	const { startUpload, isUploading } = createUploadThing('uploader', {
+	const { startUpload, isUploading, routeConfig } = createUploadThing('uploader', {
 		onUploadProgress: (progress) => {
 			uploadProgress = progress;
 		},
@@ -130,7 +131,12 @@
 			<Dialog.Header>
 				<Dialog.Title>Upload files</Dialog.Title>
 			</Dialog.Header>
-			<Input type="file" multiple bind:files={filesToBeUploaded} />
+			<Input
+				{...generatePermittedFileTypes($routeConfig)}
+				type="file"
+				multiple
+				bind:files={filesToBeUploaded}
+			/>
 			{#if filesToBeUploaded}
 				{@const arrayedFiles = Array.from(filesToBeUploaded)}
 				<ul>
