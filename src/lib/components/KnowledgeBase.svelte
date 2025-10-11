@@ -1,13 +1,5 @@
 <script lang="ts">
-	import {
-		CircleFadingPlus,
-		Ellipsis,
-		FileText,
-		SquareArrowOutUpRight,
-		Trash2,
-		Upload,
-		Workflow
-	} from '@lucide/svelte';
+	import { CircleFadingPlus, Ellipsis, FileText, Trash2, Upload, Workflow } from '@lucide/svelte';
 
 	import Input from './ui/input/input.svelte';
 	import Button, { buttonVariants } from './ui/button/button.svelte';
@@ -65,7 +57,12 @@
 				{/snippet}
 				<ul class="grid grid-cols-2 gap-2">
 					{#each await getFiles(projectId) as file (file.id)}
-						{@const slicedName = file.name.slice(0, 20)}
+						{@const extension = file.name.includes('.')
+							? file.name.substring(file.name.lastIndexOf('.') + 1)
+							: ''}
+						+{@const slicedName = extension
+							? `${file.name.slice(0, 5)}...${extension}`
+							: file.name.slice(0, 8) + '...'}
 						<li class="flex flex-col justify-between gap-2 rounded-md border p-2">
 							<div class="relative h-full">
 								<DropdownMenu.Root>
@@ -83,11 +80,6 @@
 
 											<DropdownMenu.Item onclick={() => attachments.add(file)}
 												><CircleFadingPlus /> Add file to Chat</DropdownMenu.Item
-											>
-
-											<DropdownMenu.Item
-												><SquareArrowOutUpRight /><a href={file.utURL} target="_blank">Open file</a
-												></DropdownMenu.Item
 											>
 											<DropdownMenu.Item
 												onclick={async () => await deleteFile(file.id)}
@@ -108,11 +100,7 @@
 							<Tooltip.Provider>
 								<Tooltip.Root delayDuration={100}>
 									<Tooltip.Trigger class="overflow-x-scroll font-mono text-xs"
-										>{#if slicedName.length < file.name.length}
-											{slicedName}…
-										{:else}
-											{slicedName}
-										{/if}</Tooltip.Trigger
+										>{slicedName}</Tooltip.Trigger
 									>
 									<Tooltip.Content>
 										<p>{file.name}</p>
@@ -120,6 +108,8 @@
 								</Tooltip.Root>
 							</Tooltip.Provider>
 						</li>
+					{:else}
+						<p class="col-span-2 text-xs text-muted-foreground">No files yet. Upload some below</p>
 					{/each}
 				</ul>
 			</svelte:boundary>
