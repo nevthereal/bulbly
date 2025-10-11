@@ -57,7 +57,7 @@
 				{/snippet}
 				<ul class="grid grid-cols-2 gap-2">
 					{#each await getFiles(projectId) as file (file.id)}
-						{@const slicedName = `${file.name.slice(0, 5)}...${file.name.split('.', 3)[1]}`}
+						{@const slicedName = `${file.name.slice(0, 5)}...${file.name.split('.').pop()}`}
 						<li class="flex flex-col justify-between gap-2 rounded-md border p-2">
 							<div class="relative h-full">
 								<DropdownMenu.Root>
