@@ -60,7 +60,7 @@
 						{@const extension = file.name.includes('.')
 							? file.name.substring(file.name.lastIndexOf('.') + 1)
 							: ''}
-						+{@const slicedName = extension
+						{@const slicedName = extension
 							? `${file.name.slice(0, 5)}...${extension}`
 							: file.name.slice(0, 8) + '...'}
 						<li class="flex flex-col justify-between gap-2 rounded-md border p-2">
