@@ -1,19 +1,51 @@
 <script lang="ts">
-	import DocumentChat from '$lib/components/DocumentChat.svelte';
-	import KnowledgeBase from '$lib/components/KnowledgeBase.svelte';
-	import Tools from '$lib/components/Tools.svelte';
-	import { getProject } from '$lib/remote/projects.remote.js';
+	import * as Item from '$lib/components/ui/item/index.js';
+
+	import { resolve } from '$app/paths';
+	import { CreditCard, type Icon, NotebookPen } from '@lucide/svelte';
+	import type { Component } from 'svelte';
+	import type { ResolvedPathname } from '$app/types';
+
+	type Tool = {
+		name: string;
+		icon: Component<Icon>;
+		description: string;
+		link: ResolvedPathname;
+	};
 
 	let { params } = $props();
 
-	const project = $derived(await getProject(params.project_id));
+	let tools: Tool[] = [
+		{
+			name: 'Study Plan',
+			icon: NotebookPen,
+			description: 'Generate a detailed study plan from your files',
+			link: resolve('/(protected)/project/[project_id]/study-plan', params)
+		},
+		{
+			name: 'Flashcards',
+			icon: CreditCard,
+			description: 'Generate a flashcards from your files',
+			link: resolve('/(protected)/project/[project_id]/flashcards', params)
+		}
+	];
 </script>
 
-<main class="flex h-[90dvh] flex-col p-2">
-	<h1 class="mb-4 ml-4 text-3xl font-bold">{project.name}</h1>
-	<div class="flex h-full gap-4 overflow-scroll">
-		<KnowledgeBase projectId={params.project_id} />
-		<DocumentChat projectId={params.project_id} />
-		<Tools />
-	</div>
-</main>
+<Item.Group class="mt-4 space-y-2">
+	{#each tools as tool, idx (idx)}
+		{@const Icon = tool.icon}
+		<Item.Root variant="outline">
+			{#snippet child({ props })}
+				<!-- eslint-disable svelte/no-navigation-without-resolve -->
+				<a href={tool.link} {...props}>
+					<Item.Media variant="icon">
+						<Icon />
+					</Item.Media>
+					<Item.Content>
+						{tool.name}
+					</Item.Content>
+				</a>
+			{/snippet}
+		</Item.Root>
+	{/each}
+</Item.Group>

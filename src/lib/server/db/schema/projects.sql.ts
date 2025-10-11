@@ -1,4 +1,4 @@
-import { boolean, pgTable, text, uuid } from 'drizzle-orm/pg-core';
+import { boolean, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 import { user } from './auth.sql';
 
 export const project = pgTable('project', {
@@ -32,7 +32,8 @@ export const file = pgTable('file', {
 	type: text().notNull(),
 	projectId: uuid()
 		.notNull()
-		.references(() => project.id, { onDelete: 'cascade' })
+		.references(() => project.id, { onDelete: 'cascade' }),
+	uploaded: timestamp().defaultNow().notNull()
 });
 
 export type File = typeof file.$inferSelect;
