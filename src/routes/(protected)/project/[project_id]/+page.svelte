@@ -1,6 +1,7 @@
 <script lang="ts">
 	import DocumentChat from '$lib/components/DocumentChat.svelte';
 	import KnowledgeBase from '$lib/components/KnowledgeBase.svelte';
+	import Tools from '$lib/components/Tools.svelte';
 	import { getProject } from '$lib/remote/projects.remote.js';
 
 	let { params } = $props();
@@ -13,5 +14,6 @@
 	<div class="flex h-full gap-4 overflow-scroll">
 		<KnowledgeBase projectId={params.project_id} />
 		<DocumentChat projectId={params.project_id} />
+		<Tools />
 	</div>
 </main>
