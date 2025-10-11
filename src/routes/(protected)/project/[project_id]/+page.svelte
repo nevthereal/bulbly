@@ -1,12 +1,51 @@
 <script lang="ts">
-	import type { Icon } from '@lucide/svelte';
+	import * as Item from '$lib/components/ui/item/index.js';
+
+	import { resolve } from '$app/paths';
+	import { CreditCard, type Icon, NotebookPen } from '@lucide/svelte';
+	import type { Component } from 'svelte';
+	import type { ResolvedPathname } from '$app/types';
 
 	type Tool = {
 		name: string;
-		icon: Icon;
+		icon: Component<Icon>;
 		description: string;
-		link: string;
+		link: ResolvedPathname;
 	};
 
-	let tools: Tool[] = [];
+	let { params } = $props();
+
+	let tools: Tool[] = [
+		{
+			name: 'Study Plan',
+			icon: NotebookPen,
+			description: 'Generate a detailed study plan from your files',
+			link: resolve('/(protected)/project/[project_id]/study-plan', params)
+		},
+		{
+			name: 'Flashcards',
+			icon: CreditCard,
+			description: 'Generate a flashcards from your files',
+			link: resolve('/(protected)/project/[project_id]/flashcards', params)
+		}
+	];
 </script>
+
+<Item.Group class="mt-4 space-y-2">
+	{#each tools as tool, idx (idx)}
+		{@const Icon = tool.icon}
+		<Item.Root variant="outline">
+			{#snippet child({ props })}
+				<!-- eslint-disable svelte/no-navigation-without-resolve -->
+				<a href={tool.link} {...props}>
+					<Item.Media variant="icon">
+						<Icon />
+					</Item.Media>
+					<Item.Content>
+						{tool.name}
+					</Item.Content>
+				</a>
+			{/snippet}
+		</Item.Root>
+	{/each}
+</Item.Group>
