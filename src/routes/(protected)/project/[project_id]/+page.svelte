@@ -20,13 +20,13 @@
 			name: 'Study Plan',
 			icon: NotebookPen,
 			description: 'Generate a detailed study plan from your files',
-			link: resolve('/(protected)/project/[project_id]/study-plan', params)
+			link: resolve('/(protected)/project/[project_id]/tools/study-plan', params)
 		},
 		{
 			name: 'Flashcards',
 			icon: CreditCard,
 			description: 'Generate a flashcards from your files',
-			link: resolve('/(protected)/project/[project_id]/flashcards', params)
+			link: resolve('/(protected)/project/[project_id]/tools/flashcards', params)
 		}
 	];
 </script>
@@ -38,7 +38,7 @@
 			{#snippet child({ props })}
 				<!-- eslint-disable svelte/no-navigation-without-resolve -->
 				<a href={tool.link} {...props}>
-					<Item.Media variant="icon">
+					<Item.Media class="max-lg:hidden" variant="icon">
 						<Icon />
 					</Item.Media>
 					<Item.Content>
