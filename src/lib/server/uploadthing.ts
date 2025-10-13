@@ -1,5 +1,5 @@
 import { UTApi } from 'uploadthing/server';
-import { getUser } from '$lib/remote/auth.remote';
+import { getUser } from '$lib/auth.remote';
 import { file } from './db/schema';
 import { error } from '@sveltejs/kit';
 import { createUploadthing } from 'uploadthing/server';

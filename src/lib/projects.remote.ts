@@ -1,8 +1,8 @@
-import { command, form, query } from '$app/server';
+import { command, form, getRequestEvent, query } from '$app/server';
 import { z } from 'zod';
 import { db } from '$lib/server/db';
 import { error, redirect } from '@sveltejs/kit';
-import { getUser } from './auth.remote';
+import { getUser } from '$lib/auth.remote';
 import { file, project, subject } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
 import { utapi } from '$lib/server/uploadthing';
@@ -39,10 +39,14 @@ export const getSubjects = query(async () => {
 	return subjects;
 });
 
-export const getProject = query(z.uuid(), async (id) => {
+export const getProject = query(async () => {
 	const user = await getUser();
 
 	if (!user) error(401, 'Not signed in');
+
+	const id = getRequestEvent().params.project_id;
+
+	if (!id) error(401);
 
 	const project = await db.query.project.findFirst({
 		where: {
@@ -59,8 +63,12 @@ export const getProject = query(z.uuid(), async (id) => {
 	return project;
 });
 
-export const getFiles = query(z.string(), async (projectId) => {
+export const getFiles = query(async () => {
 	await getUser();
+
+	const projectId = getRequestEvent().params.project_id;
+
+	if (!projectId) error(401);
 
 	const files = await db.query.file.findMany({
 		where: {
@@ -106,5 +114,5 @@ export const deleteFile = command(z.uuid(), async (fileId) => {
 
 	await utapi.deleteFiles(deletedFile.map((f) => f.utKey));
 
-	await getFiles(deletedFile[0].projectId).refresh();
+	await getFiles().refresh();
 });

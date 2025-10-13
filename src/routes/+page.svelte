@@ -3,8 +3,8 @@
 	import { resolve } from '$app/paths';
 	import Loading from '$lib/components/Loading.svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import { getUser } from '$lib/remote/auth.remote';
-	import { getSubjectsWithProjects } from '$lib/remote/projects.remote';
+	import { getUser } from '$lib/auth.remote';
+	import { getSubjectsWithProjects } from '$lib/projects.remote';
 	import { Plus } from '@lucide/svelte';
 </script>
 

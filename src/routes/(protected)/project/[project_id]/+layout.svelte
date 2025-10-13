@@ -1,12 +1,12 @@
 <script lang="ts">
 	import DocumentChat from '$lib/components/DocumentChat.svelte';
 	import KnowledgeBase from '$lib/components/KnowledgeBase.svelte';
-	import { getProject } from '$lib/remote/projects.remote.js';
+	import { getProject } from '$lib/projects.remote';
 	import { DraftingCompass } from '@lucide/svelte';
 
 	let { params, children } = $props();
 
-	const project = $derived(await getProject(params.project_id));
+	const project = $derived(await getProject());
 </script>
 
 <main class="flex h-[90dvh] flex-col p-2">

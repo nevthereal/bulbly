@@ -7,7 +7,7 @@
 	import '../app.css';
 	import { authClient } from '$lib/auth-client';
 	import Button, { buttonVariants } from '$lib/components/ui/button/button.svelte';
-	import { getUser } from '$lib/remote/auth.remote';
+	import { getUser } from '$lib/auth.remote';
 	import ModeToggle from '$lib/components/ModeToggle.svelte';
 	import { goto } from '$app/navigation';
 	let { children } = $props();
