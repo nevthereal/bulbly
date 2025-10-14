@@ -3,7 +3,6 @@
 
 	import Input from './ui/input/input.svelte';
 	import Button, { buttonVariants } from './ui/button/button.svelte';
-	import { Progress } from '$lib/components/ui/progress/index.js';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
@@ -15,6 +14,7 @@
 	import { attachments } from '$lib/chat.svelte';
 	import Loading from './Loading.svelte';
 	import { browser } from '$app/environment';
+	import Spinner from './ui/spinner/spinner.svelte';
 
 	let filesToBeUploaded: FileList | undefined = $state(undefined);
 	let uploadProgress: number | null = $state(null);
@@ -81,7 +81,12 @@
 												><CircleFadingPlus /> Add file to Chat</DropdownMenu.Item
 											>
 											<DropdownMenu.Item
-												onclick={async () => await deleteFile(file.id)}
+												onclick={async () =>
+													toast.promise(deleteFile(file.id), {
+														loading: 'Deleting file...',
+														success: 'Successfully deleted file',
+														error: (e) => `Something went wrong? ${e}`
+													})}
 												variant="destructive"><Trash2 />Delete File</DropdownMenu.Item
 											>
 										</DropdownMenu.Group>
@@ -145,11 +150,13 @@
 				<Button
 					disabled={$isUploading || Array.from(filesToBeUploaded).length === 0}
 					onclick={() => startUpload(arrayedFiles).then(() => getFiles().refresh())}
-					><Upload /> Upload</Button
 				>
-				{#if uploadProgress}
-					<Progress value={uploadProgress} />
-				{/if}
+					{#if !$isUploading}
+						<Upload /> Upload
+					{:else}
+						<Spinner /> Uploading {uploadProgress}%
+					{/if}
+				</Button>
 			{/if}
 		</Dialog.Content>
 	</Dialog.Root>
