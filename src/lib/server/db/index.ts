@@ -1,5 +1,4 @@
-import { drizzle } from 'drizzle-orm/neon-http';
-import { neon } from '@neondatabase/serverless';
+import { drizzle } from 'drizzle-orm/neon-serverless';
 import * as schema from './schema';
 import { defineRelations } from 'drizzle-orm';
 import { env } from '$env/dynamic/private';
@@ -31,6 +30,4 @@ const relations = defineRelations(schema, (r) => ({
 	}
 }));
 
-const client = neon(env.DATABASE_URL);
-
-export const db = drizzle(client, { relations });
+export const db = drizzle(env.DATABASE_URL, { relations });

@@ -110,9 +110,12 @@ export const deleteFile = command(z.uuid(), async (fileId) => {
 	const user = await getUser();
 	if (!user) return;
 
-	const deletedFile = await db.delete(file).where(eq(file.id, fileId)).returning();
+	try {
+		const deletedFile = await db.delete(file).where(eq(file.id, fileId)).returning();
 
-	await utapi.deleteFiles(deletedFile.map((f) => f.utKey));
-
-	await getFiles().refresh();
+		await utapi.deleteFiles(deletedFile.map((f) => f.utKey));
+		await getFiles().refresh();
+	} catch (e) {
+		return error(400, String(e));
+	}
 });
