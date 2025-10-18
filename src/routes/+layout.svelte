@@ -44,14 +44,14 @@
 							<DropdownMenu.Separator />
 							<DropdownMenu.Item
 								variant="destructive"
-								onclick={async () => await authClient.signOut().then(() => goto('/login'))}
+								onclick={async () => await authClient.signOut().then(() => goto('/auth'))}
 								>Sign out</DropdownMenu.Item
 							>
 						</DropdownMenu.Group>
 					</DropdownMenu.Content>
 				</DropdownMenu.Root>
 			{:else}
-				<Button href="/login">Sign in</Button>
+				<Button href="/auth">Sign in</Button>
 			{/if}
 		</svelte:boundary>
 

@@ -28,17 +28,19 @@
 	</ul>
 {:else}
 	<form {...createStudyPlan}>
-		<Label for="files" class="mt-4 mb-2">Files for context</Label>
-		<Select.Root bind:value={selectedFiles} type="multiple" name="files[]">
-			<Select.Trigger class="mb-2 w-full"
-				>{selAmount === 0 ? 'Select...' : `${selAmount} selected`}</Select.Trigger
-			>
-			<Select.Content>
-				{#each await files as file (file.id)}
-					<Select.Item value={file.id}>{file.name}</Select.Item>
-				{/each}
-			</Select.Content>
-		</Select.Root>
+		<svelte:boundary>
+			<Label for="files" class="mt-4 mb-2">Files for context</Label>
+			<Select.Root bind:value={selectedFiles} type="multiple" name="files[]">
+				<Select.Trigger class="mb-2 w-full"
+					>{selAmount === 0 ? 'Select...' : `${selAmount} selected`}</Select.Trigger
+				>
+				<Select.Content>
+					{#each await files as file (file.id)}
+						<Select.Item value={file.id}>{file.name}</Select.Item>
+					{/each}
+				</Select.Content>
+			</Select.Root>
+		</svelte:boundary>
 		<Label for="files" class="mt-4 mb-2">Select interrogation date</Label>
 		<Calendar
 			minValue={today(getLocalTimeZone())}
