@@ -1,31 +1,29 @@
 import { form, getRequestEvent, query } from '$app/server';
 import { inArray } from 'drizzle-orm';
-import { db } from './server/db';
-import { file } from './server/db/schema';
-import { gateway } from './server/utils';
+import { db } from '$lib/server/db';
+import { file } from '$lib/server/db/schema';
+import { gateway } from '$lib/server/utils';
 import { streamObject } from 'ai';
 import z from 'zod';
 import { error } from '@sveltejs/kit';
-import { studyPlanStep } from './server/db/schema/tools.sql';
+import { studyPlanStep } from '$lib/server/db/schema/tools.sql';
+import { requireAuth } from './auth.remote';
 
 export const createStudyPlan = form(
 	z.object({
 		date: z.iso.date().refine((v) => new Date(v)),
-		files: z.array(z.string()).min(1)
+		files: z.array(z.string()).nonempty()
 	}),
 	async (data) => {
+		await requireAuth();
 		const { project_id } = getRequestEvent().params;
 
 		if (!project_id) return error(401);
 
-		const filesFromDb = await db.query.file.findMany({
-			where: {
-				RAW: inArray(file.id, data.files)
-			}
-		});
+		const filesFromDb = await db.select().from(file).where(inArray(file.id, data.files));
 
 		const { elementStream } = streamObject({
-			model: gateway('anthropic/claude-haiku-4.5'),
+			model: gateway('openai/gpt-5-nano'),
 			schema: z.object({
 				stepName: z.string().describe('Description/Name of the step of the studyplan'),
 				date: z.iso

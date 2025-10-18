@@ -9,7 +9,7 @@
 
 	import { generateSvelteHelpers } from '@uploadthing/svelte';
 	import type { MyRouter } from '$lib/server/uploadthing';
-	import { deleteFile, getFiles } from '$lib/projects.remote';
+	import { deleteFile, getFiles } from '$lib/remote/projects.remote';
 	import { toast } from 'svelte-sonner';
 	import { attachments } from '$lib/chat.svelte';
 	import Loading from './Loading.svelte';

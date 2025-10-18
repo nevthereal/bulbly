@@ -7,7 +7,7 @@
 	import '../app.css';
 	import { authClient } from '$lib/auth-client';
 	import Button, { buttonVariants } from '$lib/components/ui/button/button.svelte';
-	import { getUser } from '$lib/auth.remote';
+	import { getUser } from '$lib/remote/auth.remote';
 	import ModeToggle from '$lib/components/ModeToggle.svelte';
 	import { goto } from '$app/navigation';
 	let { children } = $props();
@@ -44,19 +44,14 @@
 							<DropdownMenu.Separator />
 							<DropdownMenu.Item
 								variant="destructive"
-								onclick={async () => await authClient.signOut().then(() => goto('/'))}
+								onclick={async () => await authClient.signOut().then(() => goto('/login'))}
 								>Sign out</DropdownMenu.Item
 							>
 						</DropdownMenu.Group>
 					</DropdownMenu.Content>
 				</DropdownMenu.Root>
 			{:else}
-				<Button
-					onclick={async () =>
-						await authClient.signIn.social({
-							provider: 'google'
-						})}>sign in</Button
-				>
+				<Button href="/login">Sign in</Button>
 			{/if}
 		</svelte:boundary>
 

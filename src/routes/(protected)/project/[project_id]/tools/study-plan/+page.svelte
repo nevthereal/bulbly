@@ -3,8 +3,8 @@
 	import { Calendar } from '$lib/components/ui/calendar/index.js';
 	import Label from '$lib/components/ui/label/label.svelte';
 	import * as Select from '$lib/components/ui/select';
-	import { getFiles } from '$lib/projects.remote';
-	import { createStudyPlan, getStudySteps } from '$lib/tools.remote';
+	import { getFiles } from '$lib/remote/projects.remote';
+	import { createStudyPlan, getStudySteps } from '$lib/remote/tools.remote';
 	import Button from '$lib/components/ui/button/button.svelte';
 
 	let files = $derived(getFiles());
@@ -17,7 +17,7 @@
 	let dateToString = $derived(date.toString());
 </script>
 
-<h1 class="text-xl font-bold">Study Plan</h1>
+<h1 class="mb-4 text-xl font-bold">Study Plan</h1>
 {#if await steps}
 	<ul class="space-y-2 overflow-scroll">
 		{#each await steps as step (step.id)}
@@ -48,9 +48,7 @@
 			captionLayout="dropdown"
 		/>
 		<input name="date" bind:value={dateToString} type="hidden" />
-		<Button class="mt-4 w-full" type="submit">Submit</Button>
+		<Button disabled={selectedFiles.length === 0} class="mt-4 w-full" type="submit">Submit</Button>
+		{createStudyPlan.fields.allIssues()}
 	</form>
 {/if}
-{#each createStudyPlan.fields.allIssues() as issue, idx (idx)}
-	<p class="text-sm text-red-500">{issue.message}</p>
-{/each}

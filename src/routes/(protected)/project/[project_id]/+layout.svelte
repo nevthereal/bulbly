@@ -1,7 +1,7 @@
 <script lang="ts">
 	import DocumentChat from '$lib/components/DocumentChat.svelte';
 	import KnowledgeBase from '$lib/components/KnowledgeBase.svelte';
-	import { getProject } from '$lib/projects.remote';
+	import { getProject } from '$lib/remote/projects.remote';
 	import { FlaskConical } from '@lucide/svelte';
 
 	let { params, children } = $props();

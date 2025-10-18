@@ -3,7 +3,7 @@
 
 	import Input from '$lib/components/ui/input/input.svelte';
 	import Label from '$lib/components/ui/label/label.svelte';
-	import { createProject, getSubjects, createSubject } from '$lib/projects.remote';
+	import { createProject, getSubjects, createSubject } from '$lib/remote/projects.remote';
 	import { buttonVariants } from '$lib/components/ui/button';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
