@@ -154,7 +154,7 @@
 					{#if !$isUploading}
 						<Upload /> Upload
 					{:else}
-						<Spinner /> Uploading {uploadProgress}%
+						<Spinner /> Uploading {uploadProgress?.toFixed(0)}%
 					{/if}
 				</Button>
 			{/if}

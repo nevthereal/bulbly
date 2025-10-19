@@ -15,12 +15,7 @@ export const getFiles = query(async () => {
 	if (!params.project_id) throw error(404);
 
 	return await db
-		.select({
-			id: file.id,
-			name: file.name,
-			type: file.type,
-			utURL: file.utURL
-		})
+		.select()
 		.from(file)
 		.where(and(eq(file.projectId, params.project_id), eq(file.ownerId, user.id)));
 });
