@@ -72,11 +72,9 @@ export const createStudyPlan = form(
 		} catch (err) {
 			if (err instanceof AISDKError) {
 				console.error(err);
-				return error(
-					500,
-					'An error occurred while generating the study plan. Please try again later.'
-				);
+				throw error(500, 'An error occurred while generating the study plan. Please try again later.');
 			}
+			throw error(500, 'Unexpected error while generating the study plan.');
 		}
 	}
 );
