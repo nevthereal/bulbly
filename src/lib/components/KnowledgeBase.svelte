@@ -3,19 +3,18 @@
 
 	import Input from './ui/input/input.svelte';
 	import Button, { buttonVariants } from './ui/button/button.svelte';
-	import { Progress } from '$lib/components/ui/progress/index.js';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 
 	import { generateSvelteHelpers } from '@uploadthing/svelte';
 	import type { MyRouter } from '$lib/server/uploadthing';
-	import { deleteFile, getFiles } from '$lib/remote/projects.remote';
+	import { deleteFile, getFiles } from '$lib/remote/files.remote';
 	import { toast } from 'svelte-sonner';
 	import { attachments } from '$lib/chat.svelte';
 	import Loading from './Loading.svelte';
 	import { browser } from '$app/environment';
-	import { generatePermittedFileTypes } from 'uploadthing/client';
+	import Spinner from './ui/spinner/spinner.svelte';
 
 	let filesToBeUploaded: FileList | undefined = $state(undefined);
 	let uploadProgress: number | null = $state(null);
@@ -27,7 +26,7 @@
 		url: `/project/${projectId}/upload`
 	});
 
-	const { startUpload, isUploading, routeConfig } = createUploadThing('uploader', {
+	const { startUpload, isUploading } = createUploadThing('uploader', {
 		onUploadProgress: (progress) => {
 			uploadProgress = progress;
 		},
@@ -56,7 +55,7 @@
 					{e}
 				{/snippet}
 				<ul class="grid grid-cols-2 gap-2">
-					{#each await getFiles(projectId) as file (file.id)}
+					{#each await getFiles() as file (file.id)}
 						{@const extension = file.name.includes('.')
 							? file.name.substring(file.name.lastIndexOf('.') + 1)
 							: ''}
@@ -82,7 +81,12 @@
 												><CircleFadingPlus /> Add file to Chat</DropdownMenu.Item
 											>
 											<DropdownMenu.Item
-												onclick={async () => await deleteFile(file.id)}
+												onclick={async () =>
+													toast.promise(deleteFile(file.id), {
+														loading: 'Deleting file...',
+														success: 'Successfully deleted file',
+														error: (e) => `Something went wrong? ${e}`
+													})}
 												variant="destructive"><Trash2 />Delete File</DropdownMenu.Item
 											>
 										</DropdownMenu.Group>
@@ -121,12 +125,7 @@
 			<Dialog.Header>
 				<Dialog.Title>Upload files</Dialog.Title>
 			</Dialog.Header>
-			<Input
-				{...generatePermittedFileTypes($routeConfig)}
-				type="file"
-				multiple
-				bind:files={filesToBeUploaded}
-			/>
+			<Input accept="image/*,.pdf" type="file" multiple bind:files={filesToBeUploaded} />
 			{#if filesToBeUploaded}
 				{@const arrayedFiles = Array.from(filesToBeUploaded)}
 				<ul>
@@ -150,12 +149,14 @@
 				</ul>
 				<Button
 					disabled={$isUploading || Array.from(filesToBeUploaded).length === 0}
-					onclick={() => startUpload(arrayedFiles).then(() => getFiles(projectId).refresh())}
-					><Upload /> Upload</Button
+					onclick={() => startUpload(arrayedFiles).then(() => getFiles().refresh())}
 				>
-				{#if uploadProgress}
-					<Progress value={uploadProgress} />
-				{/if}
+					{#if !$isUploading}
+						<Upload /> Upload
+					{:else}
+						<Spinner /> Uploading {uploadProgress}%
+					{/if}
+				</Button>
 			{/if}
 		</Dialog.Content>
 	</Dialog.Root>

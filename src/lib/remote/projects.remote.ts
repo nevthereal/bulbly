@@ -1,16 +1,12 @@
-import { command, form, query } from '$app/server';
+import { form, getRequestEvent, query } from '$app/server';
 import { z } from 'zod';
 import { db } from '$lib/server/db';
 import { error, redirect } from '@sveltejs/kit';
-import { getUser } from './auth.remote';
-import { file, project, subject } from '$lib/server/db/schema';
-import { eq } from 'drizzle-orm';
-import { utapi } from '$lib/server/uploadthing';
+import { requireAuth } from './auth.remote';
+import { project, subject } from '$lib/server/db/schema';
 
 export const getSubjectsWithProjects = query(async () => {
-	const user = await getUser();
-
-	if (!user) error(401, 'Not signed in');
+	const user = await requireAuth();
 
 	const projects = await db.query.subject.findMany({
 		where: {
@@ -25,9 +21,7 @@ export const getSubjectsWithProjects = query(async () => {
 });
 
 export const getSubjects = query(async () => {
-	const user = await getUser();
-
-	if (!user) error(401, 'Not signed in');
+	const user = await requireAuth();
 
 	const subjects = await db.query.subject.findMany({
 		where: {
@@ -39,10 +33,12 @@ export const getSubjects = query(async () => {
 	return subjects;
 });
 
-export const getProject = query(z.uuid(), async (id) => {
-	const user = await getUser();
+export const getProject = query(async () => {
+	const user = await requireAuth();
 
-	if (!user) error(401, 'Not signed in');
+	const id = getRequestEvent().params.project_id;
+
+	if (!id) error(401);
 
 	const project = await db.query.project.findFirst({
 		where: {
@@ -59,22 +55,10 @@ export const getProject = query(z.uuid(), async (id) => {
 	return project;
 });
 
-export const getFiles = query(z.string(), async (projectId) => {
-	await getUser();
-
-	const files = await db.query.file.findMany({
-		where: {
-			projectId
-		}
-	});
-	return files;
-});
-
 export const createProject = form(
 	z.object({ title: z.string(), subjectId: z.uuid() }),
 	async ({ title, subjectId }) => {
-		const user = await getUser();
-		if (!user) error(401, 'Not signed in');
+		const user = await requireAuth();
 
 		const [{ id }] = await db
 			.insert(project)
@@ -89,22 +73,10 @@ export const createProject = form(
 );
 
 export const createSubject = form(z.object({ title: z.string() }), async ({ title }) => {
-	const user = await getUser();
-	if (!user) return;
+	const user = await requireAuth();
 
 	await db.insert(subject).values({
 		title,
 		userId: user.id
 	});
-});
-
-export const deleteFile = command(z.uuid(), async (fileId) => {
-	const user = await getUser();
-	if (!user) return;
-
-	const deletedFile = await db.delete(file).where(eq(file.id, fileId)).returning();
-
-	await utapi.deleteFiles(deletedFile.map((f) => f.utKey));
-
-	await getFiles(deletedFile[0].projectId).refresh();
 });

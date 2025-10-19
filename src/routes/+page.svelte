@@ -8,9 +8,9 @@
 	import { Plus } from '@lucide/svelte';
 </script>
 
-<svelte:boundary>
-	{#if await getUser()}
-		<div class="px-6">
+<div class="px-6">
+	<svelte:boundary>
+		{#if await getUser()}
 			<Button href="/create" class="mb-4"><Plus /> Create project</Button>
 			{#each await getSubjectsWithProjects() as sub (sub.id)}
 				<div class="mb-2">
@@ -35,14 +35,14 @@
 					</Item.Group>
 				</div>
 			{/each}
-		</div>
-	{:else}
-		<p>Sign in above</p>
-	{/if}
-	{#snippet pending()}
-		<Loading thing="Projects" />
-	{/snippet}
-	{#snippet failed()}
-		<p>Something went wrong here.</p>
-	{/snippet}
-</svelte:boundary>
+		{:else}
+			<p>Home Page</p>
+		{/if}
+		{#snippet pending()}
+			<Loading thing="Projects" />
+		{/snippet}
+		{#snippet failed()}
+			<p>Something went wrong here.</p>
+		{/snippet}
+	</svelte:boundary>
+</div>

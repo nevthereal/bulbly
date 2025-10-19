@@ -1,6 +1,6 @@
 <script lang="ts">
 	import * as Item from '$lib/components/ui/item/index.js';
-	import { FileText } from '@lucide/svelte';
+	import { Brain, FileText } from '@lucide/svelte';
 	import type { UIMessage } from 'ai';
 	import { marked } from 'marked';
 	import { fade } from 'svelte/transition';
@@ -49,6 +49,12 @@
 						<!-- eslint-disable svelte/no-at-html-tags -->
 						{@html marked(part.text)}
 					</div>
+				{:else if part.type === 'reasoning'}
+					{#if part.state === 'streaming'}
+						<p class="mb-2 flex animate-pulse items-center gap-2 text-muted-foreground select-none">
+							<Brain size={16} /> Thinking...
+						</p>
+					{/if}
 				{/if}
 			{/each}
 		</div>

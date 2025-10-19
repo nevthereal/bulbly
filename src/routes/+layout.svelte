@@ -51,12 +51,7 @@
 					</DropdownMenu.Content>
 				</DropdownMenu.Root>
 			{:else}
-				<Button
-					onclick={async () =>
-						await authClient.signIn.social({
-							provider: 'google'
-						})}>sign in</Button
-				>
+				<Button href="/auth">Sign in</Button>
 			{/if}
 		</svelte:boundary>
 

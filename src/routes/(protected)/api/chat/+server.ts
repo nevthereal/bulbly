@@ -1,11 +1,6 @@
-import { VERCEL_AI_KEY } from '$env/static/private';
 import type { chatConfig } from '$lib/chat.svelte.js';
-import { createGateway } from '@ai-sdk/gateway';
+import { gateway } from '$lib/server/utils.js';
 import { streamText, convertToModelMessages, type UIMessage } from 'ai';
-
-const gateway = createGateway({
-	apiKey: VERCEL_AI_KEY
-});
 
 const DEFAULT_SYS_PROMPT =
 	`You are a chatbot assistant in a study app called Bulbly` +

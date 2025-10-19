@@ -4,13 +4,12 @@
 	import { resolve } from '$app/paths';
 	import { CreditCard, type Icon, NotebookPen } from '@lucide/svelte';
 	import type { Component } from 'svelte';
-	import type { ResolvedPathname } from '$app/types';
 
 	type Tool = {
 		name: string;
 		icon: Component<Icon>;
 		description: string;
-		link: ResolvedPathname;
+		link: string;
 	};
 
 	let { params } = $props();
@@ -36,7 +35,6 @@
 		{@const Icon = tool.icon}
 		<Item.Root variant="outline">
 			{#snippet child({ props })}
-				<!-- eslint-disable svelte/no-navigation-without-resolve -->
 				<a href={tool.link} {...props}>
 					<Item.Media class="max-lg:hidden" variant="icon">
 						<Icon />

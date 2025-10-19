@@ -1,12 +1,12 @@
 <script lang="ts">
 	import DocumentChat from '$lib/components/DocumentChat.svelte';
 	import KnowledgeBase from '$lib/components/KnowledgeBase.svelte';
-	import { getProject } from '$lib/remote/projects.remote.js';
-	import { DraftingCompass } from '@lucide/svelte';
+	import { getProject } from '$lib/remote/projects.remote';
+	import { FlaskConical } from '@lucide/svelte';
 
 	let { params, children } = $props();
 
-	const project = $derived(await getProject(params.project_id));
+	const project = $derived(await getProject());
 </script>
 
 <main class="flex h-[90dvh] flex-col p-2">
@@ -17,7 +17,7 @@
 
 		<div class="flex h-full w-lg flex-col rounded-2xl border p-6">
 			<h1 class="flex items-center gap-2 border-b pb-2 text-2xl font-semibold">
-				<DraftingCompass /> Tools
+				<FlaskConical /> Tools (WIP)
 			</h1>
 			{@render children()}
 		</div>

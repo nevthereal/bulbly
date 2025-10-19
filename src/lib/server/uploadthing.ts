@@ -1,5 +1,5 @@
 import { UTApi } from 'uploadthing/server';
-import { getUser } from '$lib/remote/auth.remote';
+import { requireAuth } from '$lib/remote/auth.remote';
 import { file } from './db/schema';
 import { error } from '@sveltejs/kit';
 import { createUploadthing } from 'uploadthing/server';
@@ -30,13 +30,12 @@ export const myRouter = {
 		// Set permissions and file types for this FileRoute
 		.middleware(async () => {
 			// This code runs on your server before upload
-			const user = await getUser();
+			const user = await requireAuth();
 			const event = getRequestEvent();
 
 			const { project_id } = event.params;
 
 			// If you throw, the user will not be able to upload
-			if (!user) error(401, 'Not signed in');
 			if (!project_id) error(404, 'Project not found');
 
 			// Whatever is returned here is accessible in onUploadComplete as `metadata`
