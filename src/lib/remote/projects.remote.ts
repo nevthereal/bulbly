@@ -1,11 +1,9 @@
-import { command, form, getRequestEvent, query } from '$app/server';
+import { form, getRequestEvent, query } from '$app/server';
 import { z } from 'zod';
 import { db } from '$lib/server/db';
 import { error, redirect } from '@sveltejs/kit';
 import { requireAuth } from './auth.remote';
-import { file, project, subject } from '$lib/server/db/schema';
-import { eq } from 'drizzle-orm';
-import { utapi } from '$lib/server/uploadthing';
+import { project, subject } from '$lib/server/db/schema';
 
 export const getSubjectsWithProjects = query(async () => {
 	const user = await requireAuth();
@@ -57,16 +55,6 @@ export const getProject = query(async () => {
 	return project;
 });
 
-export const getFiles = query(async () => {
-	await requireAuth();
-
-	const projectId = getRequestEvent().params.project_id;
-
-	if (!projectId) error(401);
-
-	return await db.select().from(file).where(eq(file.projectId, projectId));
-});
-
 export const createProject = form(
 	z.object({ title: z.string(), subjectId: z.uuid() }),
 	async ({ title, subjectId }) => {
@@ -91,17 +79,4 @@ export const createSubject = form(z.object({ title: z.string() }), async ({ titl
 		title,
 		userId: user.id
 	});
-});
-
-export const deleteFile = command(z.uuid(), async (fileId) => {
-	await requireAuth();
-
-	try {
-		const deletedFile = await db.delete(file).where(eq(file.id, fileId)).returning();
-
-		await utapi.deleteFiles(deletedFile.map((f) => f.utKey));
-		await getFiles().refresh();
-	} catch (e) {
-		return error(400, String(e));
-	}
 });

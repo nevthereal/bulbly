@@ -10,7 +10,7 @@ export const getUser = query(() => {
 export const requireAuth = query(() => {
 	const { locals } = getRequestEvent();
 
-	if (!locals.user) return redirect(307, '/login');
+	if (!locals.user) return redirect(307, '/auth');
 
 	return locals.user;
 });

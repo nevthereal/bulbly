@@ -44,7 +44,7 @@
 							<DropdownMenu.Separator />
 							<DropdownMenu.Item
 								variant="destructive"
-								onclick={async () => await authClient.signOut().then(() => goto('/auth'))}
+								onclick={async () => await authClient.signOut().then(() => goto('/'))}
 								>Sign out</DropdownMenu.Item
 							>
 						</DropdownMenu.Group>

@@ -3,7 +3,7 @@
 	import { Calendar } from '$lib/components/ui/calendar/index.js';
 	import Label from '$lib/components/ui/label/label.svelte';
 	import * as Select from '$lib/components/ui/select';
-	import { getFiles } from '$lib/remote/projects.remote';
+	import { getFiles } from '$lib/remote/files.remote';
 	import { createStudyPlan, getStudySteps } from '$lib/remote/tools.remote';
 	import Button from '$lib/components/ui/button/button.svelte';
 
