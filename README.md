@@ -1,4 +1,4 @@
-# Bulbly
+# Synapp
 
 ## Todo:
 should have

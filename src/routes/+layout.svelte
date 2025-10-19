@@ -15,7 +15,7 @@
 
 <svelte:head>
 	<link rel="icon" href="/favicon.png" type="image/png" />
-	<title>Bulbly</title>
+	<title>Synapp</title>
 </svelte:head>
 
 <Toaster />
@@ -24,7 +24,7 @@
 
 <nav class="flex h-[10dvh] items-center justify-between px-4">
 	<a href="/" class="flex items-center text-3xl font-black tracking-tighter"
-		><img src={Logo} alt="logo" class="mr-2 h-lh" /> bulbly</a
+		><img src={Logo} alt="logo" class="mr-2 h-lh" /> synapp</a
 	>
 	<div class="flex items-center gap-2">
 		<svelte:boundary>
@@ -44,7 +44,7 @@
 							<DropdownMenu.Separator />
 							<DropdownMenu.Item
 								variant="destructive"
-								onclick={async () => await authClient.signOut().then(() => goto('/'))}
+								onclick={async () => await authClient.signOut().then(() => location.reload())}
 								>Sign out</DropdownMenu.Item
 							>
 						</DropdownMenu.Group>
