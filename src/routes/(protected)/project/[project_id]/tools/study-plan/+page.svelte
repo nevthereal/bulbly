@@ -24,7 +24,7 @@
 </script>
 
 <h1 class="mb-4 text-xl font-bold">Study Plan</h1>
-{#if (await steps).length > 0}
+{#if await steps}
 	<Button onclick={async () => await deleteSteps()}>Delete</Button>
 	<ul class="space-y-2 overflow-scroll">
 		{#each await steps as step (step.id)}
@@ -74,7 +74,7 @@
 				</Select.Content>
 			</Select.Root>
 		</svelte:boundary>
-		<Label for="files" class="mt-4 mb-2">Select interrogation date</Label>
+		<Label for="date" class="mt-4 mb-2">Select interrogation date</Label>
 		<Calendar
 			minValue={today(getLocalTimeZone())}
 			bind:value={date}
