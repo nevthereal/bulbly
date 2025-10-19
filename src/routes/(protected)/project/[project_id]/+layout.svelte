@@ -6,11 +6,11 @@
 
 	let { params, children } = $props();
 
-	const project = $derived(getProject());
+	const project = $derived(await getProject());
 </script>
 
 <main class="flex h-[90dvh] flex-col p-2">
-	<h1 class="mb-4 ml-4 text-3xl font-bold">{(await project).name}</h1>
+	<h1 class="mb-4 ml-4 text-3xl font-bold">{project.name}</h1>
 	<div class="flex h-full gap-4 overflow-scroll">
 		<KnowledgeBase projectId={params.project_id} />
 		<DocumentChat projectId={params.project_id} />

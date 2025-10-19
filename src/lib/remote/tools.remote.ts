@@ -1,5 +1,5 @@
 import { command, form, getRequestEvent, query } from '$app/server';
-import { eq, inArray } from 'drizzle-orm';
+import { eq, inArray, and } from 'drizzle-orm';
 import { db } from '$lib/server/db';
 import { file } from '$lib/server/db/schema';
 import { gateway } from '$lib/server/utils';
@@ -20,7 +20,19 @@ export const createStudyPlan = form(
 
 		if (!project_id) return error(401);
 
-		const filesFromDb = await db.select().from(file).where(inArray(file.id, data.files));
+		// ensure `and` is imported from 'drizzle-orm'
+		const user = await requireAuth();
+
+		const filesFromDb = await db
+			.select()
+			.from(file)
+			.where(
+				and(inArray(file.id, data.files), eq(file.projectId, project_id), eq(file.ownerId, user.id))
+			);
+
+		if (filesFromDb.length !== data.files.length) {
+			return error(403, 'One or more files are not accessible for this project.');
+		}
 
 		try {
 			const { elementStream } = streamObject({
