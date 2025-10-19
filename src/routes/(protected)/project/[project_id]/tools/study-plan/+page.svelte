@@ -24,7 +24,7 @@
 </script>
 
 <h1 class="mb-4 text-xl font-bold">Study Plan</h1>
-{#if await steps}
+{#if (await steps).length > 0}
 	<Button onclick={async () => await deleteSteps()}>Delete</Button>
 	<ul class="space-y-2 overflow-scroll">
 		{#each await steps as step (step.id)}
