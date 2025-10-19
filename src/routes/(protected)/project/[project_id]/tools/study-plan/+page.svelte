@@ -7,7 +7,7 @@
 	import { createStudyPlan, getStudySteps } from '$lib/remote/tools.remote';
 	import Button from '$lib/components/ui/button/button.svelte';
 
-	let files = $derived(getFiles());
+	let files = $derived(await getFiles());
 	let steps = $derived(getStudySteps());
 
 	let selectedFiles: string[] = $state([]);
@@ -35,7 +35,7 @@
 					>{selAmount === 0 ? 'Select...' : `${selAmount} selected`}</Select.Trigger
 				>
 				<Select.Content>
-					{#each await files as file (file.id)}
+					{#each files as file (file.id)}
 						<Select.Item value={file.id}>{file.name}</Select.Item>
 					{/each}
 				</Select.Content>
