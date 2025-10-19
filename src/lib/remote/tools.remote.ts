@@ -1,12 +1,12 @@
-import { form, getRequestEvent, query } from '$app/server';
-import { inArray } from 'drizzle-orm';
+import { command, form, getRequestEvent, query } from '$app/server';
+import { eq, inArray } from 'drizzle-orm';
 import { db } from '$lib/server/db';
 import { file } from '$lib/server/db/schema';
 import { gateway } from '$lib/server/utils';
-import { streamObject } from 'ai';
+import { AISDKError, streamObject } from 'ai';
 import z from 'zod';
 import { error } from '@sveltejs/kit';
-import { studyPlanStep } from '$lib/server/db/schema/tools.sql';
+import { studyPlanStep, typeEnum } from '$lib/server/db/schema/tools.sql';
 import { requireAuth } from './auth.remote';
 
 export const createStudyPlan = form(
@@ -22,44 +22,62 @@ export const createStudyPlan = form(
 
 		const filesFromDb = await db.select().from(file).where(inArray(file.id, data.files));
 
-		const { elementStream } = streamObject({
-			model: gateway('openai/gpt-5-nano'),
-			schema: z.object({
-				stepName: z.string().describe('Description/Name of the step of the studyplan'),
-				date: z.iso
-					.datetime()
-					.describe('When the step should be commenced in ISO 8601 datetime format')
-			}),
-			system: `You are a tool that generates a study plan given files for context and the date of the exam. Right now is ${new Date()}`,
-			output: 'array',
-			messages: [
-				{
-					role: 'user',
-					content: filesFromDb.map((f) => ({
-						data: f.utURL,
-						type: 'file',
-						filename: f.name,
-						mediaType: f.type
-					}))
-				},
-				{
-					role: 'user',
-					content: `My exam is set on ${data.date}`
-				}
-			],
-			maxRetries: 5
-		});
+		try {
+			const { elementStream } = streamObject({
+				model: gateway('anthropic/claude-haiku-4.5'),
+				schema: z.object({
+					title: z
+						.string()
+						.describe(
+							'Short description/Name of the step of the studyplan. Please do not include stuff like "lesson:" or "assignment" or "revision" in here. The title should be short and about the thing to study about.'
+						),
+					date: z.iso
+						.datetime()
+						.describe('When the step should be commenced in ISO 8601 datetime format'),
+					description: z.string().describe('More detailed information about the step'),
+					type: z.enum(typeEnum.enumValues)
+				}),
+				system: `You are a tool that generates a study plan given files for context and the date of the exam. Right now is ${new Date()}`,
+				output: 'array',
+				messages: [
+					{
+						role: 'user',
+						content: filesFromDb.map((f) => ({
+							data: f.utURL,
+							type: 'file',
+							filename: f.name,
+							mediaType: f.type
+						}))
+					},
+					{
+						role: 'user',
+						content: `My exam is set on ${data.date}`
+					}
+				],
+				maxRetries: 5
+			});
 
-		await db.transaction(async (tx) => {
-			for await (const step of elementStream) {
-				await tx.insert(studyPlanStep).values({
-					content: step.stepName,
-					date: new Date(step.date),
-					projectId: project_id
-				});
+			await db.transaction(async (tx) => {
+				for await (const step of elementStream) {
+					await tx.insert(studyPlanStep).values({
+						title: step.title,
+						date: new Date(step.date),
+						projectId: project_id,
+						type: step.type,
+						description: step.description
+					});
+				}
+			});
+			getStudySteps().refresh();
+		} catch (err) {
+			if (err instanceof AISDKError) {
+				console.error(err);
+				return error(
+					500,
+					'An error occurred while generating the study plan. Please try again later.'
+				);
 			}
-		});
-		getStudySteps().refresh();
+		}
 	}
 );
 
@@ -80,4 +98,15 @@ export const getStudySteps = query(async () => {
 	if (!steps.length) return null;
 
 	return steps;
+});
+
+export const deleteSteps = command(async () => {
+	await requireAuth();
+	const { params } = getRequestEvent();
+
+	if (!params.project_id) error(404);
+
+	await db.delete(studyPlanStep).where(eq(studyPlanStep.projectId, params.project_id));
+
+	getStudySteps().refresh();
 });
