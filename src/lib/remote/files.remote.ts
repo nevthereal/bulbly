@@ -9,14 +9,22 @@ import { utapi } from '$lib/server/uploadthing';
 import { DrizzleError } from 'drizzle-orm/errors';
 import { UploadThingError } from 'uploadthing/server';
 
+import { eq, and } from 'drizzle-orm';
+
 export const getFiles = query(async () => {
-	await requireAuth();
+	const user = await requireAuth();
+	const { params } = getRequestEvent();
+	if (!params.project_id) throw error(404);
 
-	const projectId = getRequestEvent().params.project_id;
-
-	if (!projectId) error(401);
-
-	return await db.select().from(file).where(eq(file.projectId, projectId));
+	return await db
+		.select({
+			id: file.id,
+			name: file.name,
+			type: file.type,
+			utURL: file.utURL
+		})
+		.from(file)
+		.where(and(eq(file.projectId, params.project_id), eq(file.ownerId, user.id)));
 });
 
 export const deleteFile = command(z.uuid(), async (fileId) => {
