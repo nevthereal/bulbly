@@ -23,8 +23,8 @@
 <ModeWatcher defaultMode="dark" />
 
 <nav class="flex h-[10dvh] items-center justify-between px-4">
-	<a href="/" class="flex items-center text-3xl font-black tracking-tighter"
-		><img src={Logo} alt="logo" class="mr-2 h-lh" /> synapp</a
+	<a href="/" class="items-cnter flex border text-3xl font-black tracking-tighter"
+		><img src={Logo} alt="logo" class="mr-2 h-8 border" /> synapp</a
 	>
 	<div class="flex items-center gap-2">
 		<svelte:boundary>

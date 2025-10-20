@@ -1,5 +1,13 @@
 <script lang="ts">
-	import { CircleFadingPlus, Ellipsis, FileText, Trash2, Upload, Workflow } from '@lucide/svelte';
+	import {
+		CircleFadingPlus,
+		Ellipsis,
+		FileText,
+		SquareArrowUpRight,
+		Trash2,
+		Upload,
+		Workflow
+	} from '@lucide/svelte';
 
 	import Input from './ui/input/input.svelte';
 	import Button, { buttonVariants } from './ui/button/button.svelte';
@@ -80,6 +88,11 @@
 											<DropdownMenu.Item onclick={() => attachments.add(file)}
 												><CircleFadingPlus /> Add file to Chat</DropdownMenu.Item
 											>
+											<a href={file.utURL} target="_blank">
+												<DropdownMenu.Item>
+													<SquareArrowUpRight /> Open file
+												</DropdownMenu.Item>
+											</a>
 											<DropdownMenu.Item
 												onclick={async () =>
 													toast.promise(deleteFile(file.id), {

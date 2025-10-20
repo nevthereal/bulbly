@@ -1,5 +1,7 @@
 # Synapp
 
+AI app for school that
+
 ## Todo:
 - [x] chat with docs
 - [x] knowledge base
