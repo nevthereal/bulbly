@@ -4,6 +4,7 @@
 	import { buttonVariants } from '$lib/components/ui/button/button.svelte';
 	import { deleteSubject, getSubjectsWithProjects } from '$lib/remote/projects.remote';
 	import { Trash2 } from '@lucide/svelte';
+	import { toast } from 'svelte-sonner';
 
 	const subjects = $derived(await getSubjectsWithProjects());
 </script>
@@ -32,8 +33,12 @@
 								<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
 								<AlertDialog.Action
 									class={buttonVariants({ variant: 'destructive' })}
-									onclick={() => deleteSubject(sub.id).updates(getSubjectsWithProjects())}
-									>Continue</AlertDialog.Action
+									onclick={() =>
+										toast.promise(deleteSubject(sub.id).updates(getSubjectsWithProjects()), {
+											loading: 'Deleting subject…',
+											success: 'Deletion sucessful',
+											error: 'An error occured during deletion'
+										})}>Continue</AlertDialog.Action
 								>
 							</AlertDialog.Footer>
 						</AlertDialog.Content>

@@ -5,7 +5,7 @@ export const project = pgTable('project', {
 	id: uuid().defaultRandom().primaryKey(),
 	name: text().notNull(),
 	subjectId: uuid()
-		.references(() => subject.id)
+		.references(() => subject.id, { onDelete: 'cascade' })
 		.notNull(),
 	creatorId: text()
 		.references(() => user.id, { onDelete: 'cascade' })
