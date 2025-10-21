@@ -10,7 +10,8 @@ export const project = pgTable('project', {
 	creatorId: text()
 		.references(() => user.id, { onDelete: 'cascade' })
 		.notNull(),
-	pinned: boolean().notNull().default(false)
+	pinned: boolean().notNull().default(false),
+	createdAt: timestamp().defaultNow()
 });
 
 export const subject = pgTable('subject', {
@@ -20,7 +21,8 @@ export const subject = pgTable('subject', {
 		.references(() => user.id, { onDelete: 'cascade' })
 		.notNull(),
 	active: boolean().default(true).notNull(),
-	pinned: boolean().notNull().default(false)
+	pinned: boolean().notNull().default(false),
+	createdAt: timestamp().defaultNow()
 });
 
 export const file = pgTable('file', {

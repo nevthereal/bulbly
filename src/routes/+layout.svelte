@@ -28,9 +28,9 @@
 		><img src={Logo} alt="logo" class="mr-2 h-8" /> synapp</a
 	>
 	{#if await getUser()}
-		<a href={resolve('/(protected)/explorer')}>Explorer</a>
+		<a class="font-medium" href={resolve('/(protected)/explorer')}>Explorer</a>
 	{/if}
-	<div class="flex items-center gap-2">
+	<div class="mr-4 flex gap-2">
 		<svelte:boundary>
 			{#snippet pending()}
 				<p>loading user</p>

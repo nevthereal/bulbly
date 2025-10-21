@@ -57,7 +57,7 @@ export const getProject = query(async () => {
 });
 
 export const createProject = form(
-	z.object({ name: z.string(), subjectId: z.uuid() }),
+	z.object({ name: z.string().min(5), subjectId: z.uuid() }),
 	async ({ name, subjectId }) => {
 		const user = await requireAuth();
 
@@ -97,3 +97,57 @@ export const deleteSubject = command(z.string(), async (id) => {
 		await tx.delete(subject).where(eq(subject.id, qSubject.id));
 	});
 });
+
+export const deleteProject = command(z.string(), async (id) => {
+	const user = await requireAuth();
+	await db.transaction(async (tx) => {
+		const qProject = await tx.query.project.findFirst({
+			where: {
+				id,
+				creatorId: user.id
+			}
+		});
+
+		if (!qProject) return error(401, 'Not your project');
+
+		await tx.delete(project).where(eq(project.id, qProject.id));
+	});
+});
+
+export const renameProject = form(
+	z.object({ id: z.uuid(), name: z.string() }),
+	async ({ id, name }) => {
+		const user = await requireAuth();
+		await db.transaction(async (tx) => {
+			const qProject = await tx.query.project.findFirst({
+				where: {
+					id,
+					creatorId: user.id
+				}
+			});
+
+			if (!qProject) return error(401, 'Not your project');
+
+			await tx.update(project).set({ name }).where(eq(project.id, qProject.id));
+		});
+	}
+);
+
+export const renameSubject = form(
+	z.object({ id: z.uuid(), title: z.string() }),
+	async ({ id, title }) => {
+		const user = await requireAuth();
+		await db.transaction(async (tx) => {
+			const qSubject = await tx.query.subject.findFirst({
+				where: {
+					id,
+					userId: user.id
+				}
+			});
+
+			if (!qSubject) return error(401, 'Not your subject');
+
+			await tx.update(subject).set({ title }).where(eq(subject.id, qSubject.id));
+		});
+	}
+);
