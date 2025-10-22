@@ -7,6 +7,7 @@ AI app for school that
 - [x] knowledge base
 - [ ] study plan
 - [ ] remove/edit subjects & proejcts
+- [ ] file upload error handling
 - [ ] academic/internet search
 - [ ] collapsible tabs
 - [ ] file explorer
