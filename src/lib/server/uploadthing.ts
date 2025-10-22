@@ -24,7 +24,7 @@ export const myRouter = {
 		},
 		pdf: {
 			maxFileSize: '1GB',
-			maxFileCount: 5
+			maxFileCount: 20
 		}
 	})
 		// Set permissions and file types for this FileRoute

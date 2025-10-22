@@ -10,12 +10,13 @@
 	import { getUser } from '$lib/remote/auth.remote';
 	import ModeToggle from '$lib/components/ModeToggle.svelte';
 	import { goto } from '$app/navigation';
+	import { resolve } from '$app/paths';
 	let { children } = $props();
 </script>
 
 <svelte:head>
 	<link rel="icon" href="/favicon.png" type="image/png" />
-	<title>Synapp</title>
+	<title>Pontiq</title>
 </svelte:head>
 
 <Toaster />
@@ -23,10 +24,13 @@
 <ModeWatcher defaultMode="dark" />
 
 <nav class="flex h-[10dvh] items-center justify-between px-4">
-	<a href="/" class="flex items-center text-3xl font-black tracking-tighter"
-		><img src={Logo} alt="logo" class="mr-2 h-lh" /> synapp</a
+	<a href="/" class="items-cnter flex text-3xl font-black tracking-tighter"
+		><img src={Logo} alt="logo" class="mr-2 h-8" /> pontiq</a
 	>
-	<div class="flex items-center gap-2">
+	{#if await getUser()}
+		<a class="font-medium" href={resolve('/(protected)/explorer')}>Explorer</a>
+	{/if}
+	<div class="mr-4 flex gap-2">
 		<svelte:boundary>
 			{#snippet pending()}
 				<p>loading user</p>

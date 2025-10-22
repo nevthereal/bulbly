@@ -5,11 +5,13 @@ export const project = pgTable('project', {
 	id: uuid().defaultRandom().primaryKey(),
 	name: text().notNull(),
 	subjectId: uuid()
-		.references(() => subject.id)
+		.references(() => subject.id, { onDelete: 'cascade' })
 		.notNull(),
 	creatorId: text()
 		.references(() => user.id, { onDelete: 'cascade' })
-		.notNull()
+		.notNull(),
+	pinned: boolean().notNull().default(false),
+	createdAt: timestamp().defaultNow()
 });
 
 export const subject = pgTable('subject', {
@@ -18,7 +20,9 @@ export const subject = pgTable('subject', {
 	userId: text()
 		.references(() => user.id, { onDelete: 'cascade' })
 		.notNull(),
-	active: boolean().default(true).notNull()
+	active: boolean().default(true).notNull(),
+	pinned: boolean().notNull().default(false),
+	createdAt: timestamp().defaultNow()
 });
 
 export const file = pgTable('file', {

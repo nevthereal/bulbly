@@ -15,10 +15,6 @@
 	let open = $state(false);
 
 	let value = $state('');
-
-	const triggerContent = $derived(
-		(await getSubjects()).find((s) => s.id === value)?.title ?? 'Select a subject'
-	);
 </script>
 
 <main class="mx-auto max-w-xl">
@@ -27,14 +23,17 @@
 		<Field.Group>
 			<Field.Set>
 				<Field.Field>
-					<Field.Label for="title" class="mb-1">Name</Field.Label>
-					<Input placeholder="eg. Redox Chemistry" name="title" />
+					<Field.Label for="name" class="mb-1">Name</Field.Label>
+					<Input placeholder="eg. Redox Chemistry" name="name" />
 				</Field.Field>
 				<Field.Field class="mt-4">
-					<Field.Label for="title" class="mb-1">Subject/Class</Field.Label>
+					<Field.Label for="subjectId" class="mb-1">Subject/Class</Field.Label>
 
 					<Select.Root type="single" bind:value name="subjectId">
-						<Select.Trigger class="w-full">{triggerContent}</Select.Trigger>
+						<Select.Trigger class="w-full"
+							>{(await getSubjects()).find((s) => s.id === value)?.title ??
+								'Select a subject'}</Select.Trigger
+						>
 						<Select.Content>
 							{#each await getSubjects() as sub (sub.id)}
 								<Select.Item value={sub.id}>{sub.title}</Select.Item>
