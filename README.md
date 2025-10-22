@@ -1,4 +1,4 @@
-# Synapp
+# Pontiq
 
 AI app for school that
 
