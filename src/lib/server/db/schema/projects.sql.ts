@@ -52,7 +52,8 @@ export const file = pgTable(
 	(t) => [
 		index('url_idx').on(t.utURL),
 		index('key_idx').on(t.utKey),
-		index('project_idx').on(t.projectId)
+		index('project_idx').on(t.projectId),
+		index('file_owner_idx').on(t.ownerId)
 	]
 );
 
