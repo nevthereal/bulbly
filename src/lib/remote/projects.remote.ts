@@ -11,7 +11,7 @@ export const getSubjectsWithProjects = query(async () => {
 
 	const projects = await db.query.subject.findMany({
 		where: {
-			userId: user.id
+			creatorId: user.id
 		},
 		with: {
 			projects: true
@@ -26,7 +26,7 @@ export const getSubjects = query(async () => {
 
 	const subjects = await db.query.subject.findMany({
 		where: {
-			userId: user.id,
+			creatorId: user.id,
 			active: true
 		}
 	});
@@ -78,7 +78,7 @@ export const createSubject = form(z.object({ title: z.string() }), async ({ titl
 
 	await db.insert(subject).values({
 		title,
-		userId: user.id
+		creatorId: user.id
 	});
 });
 
@@ -88,7 +88,7 @@ export const deleteSubject = command(z.string(), async (id) => {
 		const qSubject = await tx.query.subject.findFirst({
 			where: {
 				id,
-				userId: user.id
+				creatorId: user.id
 			}
 		});
 
@@ -141,7 +141,7 @@ export const renameSubject = form(
 			const qSubject = await tx.query.subject.findFirst({
 				where: {
 					id,
-					userId: user.id
+					creatorId: user.id
 				}
 			});
 
