@@ -10,6 +10,10 @@ import { studyPlanStep, typeEnum } from '$lib/server/db/schema/tools.sql';
 import { requireAuth } from './auth.remote';
 import { UNKEY_API_KEY } from '$env/static/private';
 import { Ratelimit } from '@unkey/ratelimit';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import dayjs from 'dayjs';
+
+dayjs.extend(relativeTime);
 
 export const createStudyPlan = form(
 	z.object({
@@ -32,7 +36,7 @@ export const createStudyPlan = form(
 
 		const { success, reset } = await limiter.limit(project_id);
 
-		if (!success) return error(429, `Limit reached. Try again in ${new Date(reset)}`);
+		if (!success) error(429, `Limit reached. Try again in ${dayjs(new Date(reset)).fromNow()}`);
 
 		// ensure `and` is imported from 'drizzle-orm'
 		const user = await requireAuth();
