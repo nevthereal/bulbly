@@ -8,6 +8,8 @@ import z from 'zod';
 import { error } from '@sveltejs/kit';
 import { studyPlanStep, typeEnum } from '$lib/server/db/schema/tools.sql';
 import { requireAuth } from './auth.remote';
+import { UNKEY_API_KEY } from '$env/static/private';
+import { Ratelimit } from '@unkey/ratelimit';
 
 export const createStudyPlan = form(
 	z.object({
@@ -16,9 +18,21 @@ export const createStudyPlan = form(
 	}),
 	async (data) => {
 		await requireAuth();
+
 		const { project_id } = getRequestEvent().params;
 
 		if (!project_id) return error(401);
+
+		const limiter = new Ratelimit({
+			rootKey: UNKEY_API_KEY,
+			namespace: 'tool:study-plan',
+			limit: 1,
+			duration: '1h'
+		});
+
+		const { success, reset } = await limiter.limit(project_id);
+
+		if (!success) return error(429, `Limit reached. Try again in ${new Date(reset)}`);
 
 		// ensure `and` is imported from 'drizzle-orm'
 		const user = await requireAuth();
