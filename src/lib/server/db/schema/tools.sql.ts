@@ -1,15 +1,8 @@
 import { pgEnum, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 import { project } from './projects.sql';
+import { studyStepTypes } from '../../../zod';
 
-export const typeEnum = pgEnum('study_plan_types', [
-	'milestone',
-	'lesson',
-	'assignment',
-	'project',
-	'exam',
-	'review',
-	'break'
-]);
+export const typeEnum = pgEnum('study_plan_types', studyStepTypes);
 
 export const studyPlanStep = pgTable('study_plan_step', {
 	id: uuid().primaryKey().defaultRandom(),

@@ -8,7 +8,7 @@
 	import Button from './ui/button/button.svelte';
 
 	let { projectId }: { projectId: string } = $props();
-	const chat = new Chat({ id: `${projectId}-chat` });
+	const chat = new Chat({ id: `${projectId}-chat`, onFinish: () => {} });
 
 	let chatContainer = $state<HTMLElement>();
 
