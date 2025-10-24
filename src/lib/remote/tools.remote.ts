@@ -38,21 +38,23 @@ export const createStudyPlan = form(
 
 		if (!success) error(429, `Limit reached. Try again in ${dayjs(new Date(reset)).fromNow()}`);
 
-		// ensure `and` is imported from 'drizzle-orm'
-		const user = await requireAuth();
-
-		const filesFromDb = await db
-			.select()
-			.from(file)
-			.where(
-				and(inArray(file.id, data.files), eq(file.projectId, project_id), eq(file.ownerId, user.id))
-			);
-
-		if (filesFromDb.length !== data.files.length) {
-			return error(403, 'One or more files are not accessible for this project.');
-		}
-
 		try {
+			const user = await requireAuth();
+
+			const filesFromDb = await db
+				.select()
+				.from(file)
+				.where(
+					and(
+						inArray(file.id, data.files),
+						eq(file.projectId, project_id),
+						eq(file.ownerId, user.id)
+					)
+				);
+
+			if (filesFromDb.length !== data.files.length) {
+				return error(403, 'One or more files are not accessible for this project.');
+			}
 			const { elementStream } = streamObject({
 				model: gateway('anthropic/claude-haiku-4.5'),
 				schema: z.object({
@@ -102,12 +104,9 @@ export const createStudyPlan = form(
 		} catch (err) {
 			if (err instanceof AISDKError) {
 				console.error(err);
-				throw error(
-					500,
-					'An error occurred while generating the study plan. Please try again later.'
-				);
+				error(500, 'An error occurred while generating the study plan. Please try again later.');
 			}
-			throw error(500, 'Unexpected error while generating the study plan.');
+			error(500, 'Unexpected error while generating the study plan.');
 		}
 	}
 );
