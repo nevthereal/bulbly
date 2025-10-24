@@ -2,26 +2,12 @@
 	import * as Item from '$lib/components/ui/item/index.js';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 
-	import { type DateValue, today, getLocalTimeZone } from '@internationalized/date';
-	import { Calendar } from '$lib/components/ui/calendar/index.js';
-	import Label from '$lib/components/ui/label/label.svelte';
-	import * as Select from '$lib/components/ui/select';
-	import { getFiles } from '$lib/remote/files.remote';
-	import { createStudyPlan, deleteSteps, getStudySteps } from '$lib/remote/tools.remote';
+	import { deleteSteps, getStudySteps } from '$lib/remote/tools.remote';
 	import Button, { buttonVariants } from '$lib/components/ui/button/button.svelte';
 	import { Maximize2 } from '@lucide/svelte';
-	import { toast } from 'svelte-sonner';
+	import Muted from '$lib/components/Muted.svelte';
 
-	let files = $derived(await getFiles());
 	let steps = $derived(getStudySteps());
-
-	let selectedFiles: string[] = $state([]);
-	const selAmount = $derived(selectedFiles.length);
-
-	let date: DateValue = $state(today(getLocalTimeZone()));
-	let dateToString = $derived(date.toString());
-
-	let submitting = $state(false);
 </script>
 
 <h1 class="mb-4 text-xl font-bold">Study Plan</h1>
@@ -55,50 +41,7 @@
 				</Item.Root>
 			{/each}
 		</ul>
-	{:else if !submitting}
-		<form
-			{...createStudyPlan.enhance(async ({ submit, form }) => {
-				try {
-					submitting = true;
-					await submit();
-					form.reset();
-				} catch (error) {
-					toast.error(error.body.message);
-				}
-
-				await submit().then(() => (submitting = false));
-			})}
-		>
-			<Label for="files" class="mt-4 mb-2">Files for context</Label>
-			<Select.Root bind:value={selectedFiles} type="multiple" name="files[]">
-				<Select.Trigger class="mb-2 w-full"
-					>{selAmount === 0 ? 'Select...' : `${selAmount} selected`}</Select.Trigger
-				>
-				<Select.Content>
-					{#each files as file (file.id)}
-						<Select.Item value={file.id}>{file.name}</Select.Item>
-					{/each}
-				</Select.Content>
-			</Select.Root>
-			<Label for="date" class="mt-4 mb-2">Select interrogation date</Label>
-			<Calendar
-				minValue={today(getLocalTimeZone())}
-				bind:value={date}
-				type="single"
-				class="rounded-md border shadow-sm"
-				captionLayout="dropdown"
-			/>
-			<input name="date" bind:value={dateToString} type="hidden" />
-			<Button disabled={selectedFiles.length === 0} class="mt-4 w-full" type="submit">Submit</Button
-			>
-			{createStudyPlan.fields.allIssues()}
-		</form>
 	{:else}
-		<p class="animate-pulse text-center font-mono text-muted-foreground">
-			Creating your tailored study plan...
-		</p>
+		<Muted>No study plan generated yet. Prompt the chat to generate one!</Muted>
 	{/if}
-	{#snippet onerror(e)}
-		{JSON.stringify(e)}
-	{/snippet}
 </svelte:boundary>
