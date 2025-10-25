@@ -1,12 +1,10 @@
+import { type MyUIMessage, tools } from '$lib/ai.js';
 import type { chatConfig } from '$lib/chat.svelte.js';
-import { db } from '$lib/server/db';
-import { studyPlanStep } from '$lib/server/db/schema';
 import { gateway } from '$lib/server/utils.js';
-import { zStudyStep } from '$lib/zod';
 import { error } from '@sveltejs/kit';
-import { streamText, convertToModelMessages, type UIMessage, stepCountIs, tool } from 'ai';
+import { streamText, convertToModelMessages, stepCountIs } from 'ai';
 
-export async function POST({ request, locals, params }) {
+export async function POST({ request, locals }) {
 	if (!locals.user) error(401, 'No user');
 
 	const DEFAULT_SYS_PROMPT =
@@ -74,33 +72,14 @@ export async function POST({ request, locals, params }) {
   END OF STUDY MODE SYSTEM PROMPT
   `;
 
-	const studyPlanTool = tool({
-		description:
-			'Creates a study plan for the user at a given date using the context of given files.',
-		inputSchema: zStudyStep,
-		name: 'study_plan',
-
-		execute: async (args) => {
-			await db.insert(studyPlanStep).values({
-				title: args.title,
-				date: new Date(args.date),
-				projectId: params.project_id,
-				type: args.type,
-				description: args.description
-			});
-		}
-	});
-
-	const { messages, config }: { messages: UIMessage[]; config: typeof chatConfig.current } =
+	const { messages, config }: { messages: MyUIMessage[]; config: typeof chatConfig.current } =
 		await request.json();
 
 	const result = streamText({
 		model: gateway('openai/gpt-5-mini'),
 		messages: convertToModelMessages(messages),
 		system: config.studyModeEnabled ? STUDY_MODE_PROMPT : DEFAULT_SYS_PROMPT,
-		tools: {
-			study_plan: studyPlanTool
-		},
+		tools,
 		stopWhen: stepCountIs(20)
 	});
 

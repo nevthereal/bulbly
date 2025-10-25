@@ -9,10 +9,11 @@
 	import { DefaultChatTransport } from 'ai';
 	import { resolve } from '$app/paths';
 	import { getStudySteps } from '$lib/remote/tools.remote';
+	import type { MyUIMessage } from '$lib/ai';
 
 	let { projectId }: { projectId: string } = $props();
 
-	const chat = new Chat({
+	const chat = new Chat<MyUIMessage>({
 		id: `${projectId}-chat`,
 		transport: new DefaultChatTransport({
 			api: resolve('/(protected)/project/[project_id]/api/chat', { project_id: projectId })

@@ -1,11 +1,11 @@
 <script lang="ts">
+	import type { MyUIMessage } from '$lib/ai';
 	import * as Item from '$lib/components/ui/item/index.js';
 	import { Brain, FileText, ToolCase } from '@lucide/svelte';
-	import type { UIMessage } from 'ai';
 	import { marked } from 'marked';
 	import { fade } from 'svelte/transition';
 
-	let { message }: { message: UIMessage } = $props();
+	let { message }: { message: MyUIMessage } = $props();
 </script>
 
 <li in:fade|global>
@@ -55,9 +55,9 @@
 							<Brain size={16} /> Thinking...
 						</p>
 					{/if}
-				{:else if part.type === 'tool-'}
+				{:else if part.type === 'tool-study_plan'}
 					<p class="mb-2 flex items-center gap-2 text-muted-foreground select-none">
-						<ToolCase size={16} /> Used tool {JSON.stringify(part)}
+						<ToolCase size={16} /> Used study plan tool
 					</p>
 				{/if}
 			{/each}
