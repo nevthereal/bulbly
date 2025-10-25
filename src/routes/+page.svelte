@@ -6,6 +6,7 @@
 	import { getUser } from '$lib/remote/auth.remote';
 	import { getSubjectsWithProjects } from '$lib/remote/projects.remote';
 	import { Plus } from '@lucide/svelte';
+	import Muted from '$lib/components/Muted.svelte';
 </script>
 
 <div class="px-6">
@@ -30,7 +31,7 @@
 								{/snippet}
 							</Item.Root>
 						{:else}
-							<p class="text-xs text-muted-foreground">No projects in subject</p>
+							<Muted>No projects in subject</Muted>
 						{/each}
 					</Item.Group>
 				</div>

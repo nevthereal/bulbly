@@ -27,7 +27,8 @@ export const getSubjects = query(async () => {
 	const subjects = await db.query.subject.findMany({
 		where: {
 			creatorId: user.id,
-			active: true
+			active: true,
+			pinned: false
 		}
 	});
 
@@ -114,7 +115,7 @@ export const deleteProject = command(z.string(), async (id) => {
 	});
 });
 
-export const renameProject = form(
+export const editProject = form(
 	z.object({ id: z.uuid(), name: z.string() }),
 	async ({ id, name }) => {
 		const user = await requireAuth();
@@ -133,8 +134,8 @@ export const renameProject = form(
 	}
 );
 
-export const renameSubject = form(
-	z.object({ id: z.uuid(), title: z.string() }),
+export const editSubject = form(
+	z.object({ id: z.uuid(), title: z.string().min(3) }),
 	async ({ id, title }) => {
 		const user = await requireAuth();
 		await db.transaction(async (tx) => {

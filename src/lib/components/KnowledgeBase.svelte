@@ -23,6 +23,7 @@
 	import Loading from './Loading.svelte';
 	import { browser } from '$app/environment';
 	import Spinner from './ui/spinner/spinner.svelte';
+	import Muted from './Muted.svelte';
 
 	let filesToBeUploaded: FileList | undefined = $state(undefined);
 	let uploadProgress: number | null = $state(null);
@@ -60,7 +61,7 @@
 					<Loading thing="files" />
 				{/snippet}
 				{#snippet failed(e)}
-					{e}
+					{JSON.stringify(e)}
 				{/snippet}
 				<ul class="grid grid-cols-2 gap-2">
 					{#each await getFiles() as file (file.id)}
@@ -126,7 +127,9 @@
 							</Tooltip.Provider>
 						</li>
 					{:else}
-						<p class="col-span-2 text-xs text-muted-foreground">No files yet. Upload some below</p>
+						<Muted class="col-span-2 text-xs text-muted-foreground"
+							>No files yet. Upload some below</Muted
+						>
 					{/each}
 				</ul>
 			</svelte:boundary>

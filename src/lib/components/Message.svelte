@@ -1,11 +1,14 @@
 <script lang="ts">
+	import * as Accordion from '$lib/components/ui/accordion/index.js';
+
+	import type { MyUIMessage } from '$lib/ai';
 	import * as Item from '$lib/components/ui/item/index.js';
-	import { Brain, FileText } from '@lucide/svelte';
-	import type { UIMessage } from 'ai';
+	import { Brain, FileText, ToolCase } from '@lucide/svelte';
 	import { marked } from 'marked';
 	import { fade } from 'svelte/transition';
+	import { buttonVariants } from './ui/button';
 
-	let { message }: { message: UIMessage } = $props();
+	let { message }: { message: MyUIMessage } = $props();
 </script>
 
 <li in:fade|global>
@@ -43,6 +46,26 @@
 		</Item.Root>
 	{:else if message.role === 'assistant'}
 		<div in:fade|global>
+			<Accordion.Root type="single">
+				<Accordion.Item value="item-1">
+					<Accordion.Trigger>Tool calls</Accordion.Trigger>
+					<Accordion.Content>
+						<ul class="space-y-2">
+							{#each message.parts as part, partIndex (partIndex)}
+								{#if part.type === 'tool-study_plan'}
+									{#if part.input}
+										<li class="flex items-center gap-2 text-muted-foreground select-none">
+											<ToolCase size={16} />
+											Added study step "{part.input.title}"
+										</li>
+									{/if}
+								{/if}
+							{/each}
+						</ul>
+					</Accordion.Content>
+				</Accordion.Item>
+			</Accordion.Root>
+
 			{#each message.parts as part, partIndex (partIndex)}
 				{#if part.type === 'text'}
 					<div class="prose max-w-full dark:prose-invert">
