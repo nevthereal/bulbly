@@ -1,6 +1,6 @@
 <script lang="ts">
 	import * as Item from '$lib/components/ui/item/index.js';
-	import { Brain, FileText } from '@lucide/svelte';
+	import { Brain, FileText, ToolCase } from '@lucide/svelte';
 	import type { UIMessage } from 'ai';
 	import { marked } from 'marked';
 	import { fade } from 'svelte/transition';
@@ -55,6 +55,10 @@
 							<Brain size={16} /> Thinking...
 						</p>
 					{/if}
+				{:else if part.type === 'tool-'}
+					<p class="mb-2 flex items-center gap-2 text-muted-foreground select-none">
+						<ToolCase size={16} /> Used tool {JSON.stringify(part)}
+					</p>
 				{/if}
 			{/each}
 		</div>

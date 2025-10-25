@@ -61,7 +61,7 @@
 					<Loading thing="files" />
 				{/snippet}
 				{#snippet failed(e)}
-					{e}
+					{JSON.stringify(e)}
 				{/snippet}
 				<ul class="grid grid-cols-2 gap-2">
 					{#each await getFiles() as file (file.id)}
