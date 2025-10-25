@@ -123,7 +123,7 @@
 				<Loading thing="subjects and projects" />
 			{/snippet}
 			<div class="grid grid-cols-4 gap-4">
-				{#each await getSubjectsWithProjects() as sub (sub.id)}
+{#each (await getSubjectsWithProjects()).filter((s) => s.pinned !== true) as sub (sub.id)}
 					<div class="rounded-lg border p-4">
 						<div class="flex items-center justify-between gap-2">
 							<h2 class="text-xl font-semibold">{sub.title}:</h2>
