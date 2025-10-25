@@ -9,11 +9,11 @@ importers:
   .:
     dependencies:
       '@ai-sdk/gateway':
-        specifier: 2.0.0-beta.37
-        version: 2.0.0-beta.37(effect@3.17.7)(zod@4.1.12)
+        specifier: 2.0.1
+        version: 2.0.1(zod@4.1.12)
       '@ai-sdk/svelte':
-        specifier: 4.0.0-beta.72
-        version: 4.0.0-beta.72(effect@3.17.7)(svelte@5.41.3)(zod@4.1.12)
+        specifier: 3.0.78
+        version: 3.0.78(svelte@5.41.3)(zod@4.1.12)
       '@neondatabase/serverless':
         specifier: ^1.0.2
         version: 1.0.2
@@ -24,8 +24,8 @@ importers:
         specifier: ^7.3.3
         version: 7.3.3(svelte@5.41.3)(uploadthing@7.7.4(tailwindcss@4.1.14))
       ai:
-        specifier: 6.0.0-beta.72
-        version: 6.0.0-beta.72(effect@3.17.7)(zod@4.1.12)
+        specifier: 5.0.78
+        version: 5.0.78(zod@4.1.12)
       better-auth:
         specifier: ^1.3.7
         version: 1.3.27(@sveltejs/kit@2.47.3(@opentelemetry/api@1.9.0)(@sveltejs/vite-plugin-svelte@6.2.1(svelte@5.41.3)(vite@7.1.11(@types/node@22.18.11)(jiti@2.6.1)(lightningcss@1.30.1)))(svelte@5.41.3)(vite@7.1.11(@types/node@22.18.11)(jiti@2.6.1)(lightningcss@1.30.1)))(svelte@5.41.3)
@@ -159,36 +159,30 @@ importers:
 
 packages:
 
-  '@ai-sdk/gateway@2.0.0-beta.37':
-    resolution: {integrity: sha512-7EpQSI4GnlSCupwYDuzLQH9qzifnMSWJ+urWlIPwRH/rROIzkHLn+kGdZAV1eD+wM0QIH1LY6equmD/hRu1s0A==}
+  '@ai-sdk/gateway@2.0.1':
+    resolution: {integrity: sha512-vPVIbnP35ZnayS937XLo85vynR85fpBQWHCdUweq7apzqFOTU2YkUd4V3msebEHbQ2Zro60ZShDDy9SMiyWTqA==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
 
-  '@ai-sdk/provider-utils@4.0.0-beta.20':
-    resolution: {integrity: sha512-5tfooQSLjpTFAHrH3AH/bduGtgqwxG+DN3Zz4yTtprThSoGMGgiYgWWqVyu0BaaR+HGwyi3KTja+WXXaJnr1uQ==}
+  '@ai-sdk/provider-utils@3.0.12':
+    resolution: {integrity: sha512-ZtbdvYxdMoria+2SlNarEk6Hlgyf+zzcznlD55EAl+7VZvJaSg2sqPvwArY7L6TfDEDJsnCq0fdhBSkYo0Xqdg==}
     engines: {node: '>=18'}
     peerDependencies:
-      '@valibot/to-json-schema': ^1.3.0
-      arktype: ^2.1.22
-      effect: ^3.18.4
       zod: ^3.25.76 || ^4.1.8
-    peerDependenciesMeta:
-      '@valibot/to-json-schema':
-        optional: true
-      arktype:
-        optional: true
-      effect:
-        optional: true
 
-  '@ai-sdk/provider@3.0.0-beta.8':
-    resolution: {integrity: sha512-DECiv2zheg6uSBk85bZAo3egIKaMwp/mdbOY/g7ndNCkVc2l2b6m98Std7Xu6Bs128eAWPsE630ilKGQ9uZcLA==}
+  '@ai-sdk/provider@2.0.0':
+    resolution: {integrity: sha512-6o7Y2SeO9vFKB8lArHXehNuusnpddKPk7xqL7T2/b+OvXMRIXUO1rR4wcv1hAFUAT9avGZshty3Wlua/XA7TvA==}
     engines: {node: '>=18'}
 
-  '@ai-sdk/svelte@4.0.0-beta.72':
-    resolution: {integrity: sha512-/xB+mlPJuL79CuY9aS/3D9YnZEXSCZ4wAbqImEeBmIugWY6N+pJBJfuDNWgjqtFq/y9b/5BvijA0+HDcQ/GRcw==}
+  '@ai-sdk/svelte@3.0.78':
+    resolution: {integrity: sha512-u8GNESrNzYZ8Yydu4/O6H3X0I9q8blUt2/dsXiZS0Yb1m71N26BTl8F2cdAon16M8ENzsK04DqKWMtJ1acwc6Q==}
     peerDependencies:
       svelte: ^5.31.0
+      zod: ^3.25.76 || ^4.1.8
+    peerDependenciesMeta:
+      zod:
+        optional: true
 
   '@better-auth/core@1.3.27':
     resolution: {integrity: sha512-3Sfdax6MQyronY+znx7bOsfQHI6m1SThvJWb0RDscFEAhfqLy95k1sl+/PgGyg0cwc2cUXoEiAOSqYdFYrg3vA==}
@@ -1283,8 +1277,8 @@ packages:
     resolution: {integrity: sha512-MnA+YT8fwfJPgBx3m60MNqakm30XOkyIoH1y6huTQvC0PwZG7ki8NacLBcrPbNoo8vEZy7Jpuk7+jMO+CUovTQ==}
     engines: {node: '>= 14'}
 
-  ai@6.0.0-beta.72:
-    resolution: {integrity: sha512-NA68xIayJI8KpY60HMFk/4gOExh9ihfSB2bppIl4jolEKKXZRF+DRO6fNGCalvfd8zO9kzKGUOG9yBd+MbQ72w==}
+  ai@5.0.78:
+    resolution: {integrity: sha512-ec77fmQwJGLduswMrW4AAUGSOiu8dZaIwMmWHHGKsrMUFFS6ugfkTyx0srtuKYHNRRLRC2dT7cPirnUl98VnxA==}
     engines: {node: '>=18'}
     peerDependencies:
       zod: ^3.25.76 || ^4.1.8
@@ -2645,40 +2639,31 @@ packages:
 
 snapshots:
 
-  '@ai-sdk/gateway@2.0.0-beta.37(effect@3.17.7)(zod@4.1.12)':
+  '@ai-sdk/gateway@2.0.1(zod@4.1.12)':
     dependencies:
-      '@ai-sdk/provider': 3.0.0-beta.8
-      '@ai-sdk/provider-utils': 4.0.0-beta.20(effect@3.17.7)(zod@4.1.12)
+      '@ai-sdk/provider': 2.0.0
+      '@ai-sdk/provider-utils': 3.0.12(zod@4.1.12)
       '@vercel/oidc': 3.0.3
       zod: 4.1.12
-    transitivePeerDependencies:
-      - '@valibot/to-json-schema'
-      - arktype
-      - effect
 
-  '@ai-sdk/provider-utils@4.0.0-beta.20(effect@3.17.7)(zod@4.1.12)':
+  '@ai-sdk/provider-utils@3.0.12(zod@4.1.12)':
     dependencies:
-      '@ai-sdk/provider': 3.0.0-beta.8
+      '@ai-sdk/provider': 2.0.0
       '@standard-schema/spec': 1.0.0
       eventsource-parser: 3.0.6
       zod: 4.1.12
-    optionalDependencies:
-      effect: 3.17.7
 
-  '@ai-sdk/provider@3.0.0-beta.8':
+  '@ai-sdk/provider@2.0.0':
     dependencies:
       json-schema: 0.4.0
 
-  '@ai-sdk/svelte@4.0.0-beta.72(effect@3.17.7)(svelte@5.41.3)(zod@4.1.12)':
+  '@ai-sdk/svelte@3.0.78(svelte@5.41.3)(zod@4.1.12)':
     dependencies:
-      '@ai-sdk/provider-utils': 4.0.0-beta.20(effect@3.17.7)(zod@4.1.12)
-      ai: 6.0.0-beta.72(effect@3.17.7)(zod@4.1.12)
+      '@ai-sdk/provider-utils': 3.0.12(zod@4.1.12)
+      ai: 5.0.78(zod@4.1.12)
       svelte: 5.41.3
-    transitivePeerDependencies:
-      - '@valibot/to-json-schema'
-      - arktype
-      - effect
-      - zod
+    optionalDependencies:
+      zod: 4.1.12
 
   '@better-auth/core@1.3.27':
     dependencies:
@@ -3607,17 +3592,13 @@ snapshots:
 
   agent-base@7.1.4: {}
 
-  ai@6.0.0-beta.72(effect@3.17.7)(zod@4.1.12):
+  ai@5.0.78(zod@4.1.12):
     dependencies:
-      '@ai-sdk/gateway': 2.0.0-beta.37(effect@3.17.7)(zod@4.1.12)
-      '@ai-sdk/provider': 3.0.0-beta.8
-      '@ai-sdk/provider-utils': 4.0.0-beta.20(effect@3.17.7)(zod@4.1.12)
+      '@ai-sdk/gateway': 2.0.1(zod@4.1.12)
+      '@ai-sdk/provider': 2.0.0
+      '@ai-sdk/provider-utils': 3.0.12(zod@4.1.12)
       '@opentelemetry/api': 1.9.0
       zod: 4.1.12
-    transitivePeerDependencies:
-      - '@valibot/to-json-schema'
-      - arktype
-      - effect
 
   ajv@6.12.6:
     dependencies:
