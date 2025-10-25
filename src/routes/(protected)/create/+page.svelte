@@ -8,9 +8,6 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import * as Field from '$lib/components/ui/field/index.js';
-	import { createAIContext } from '@ai-sdk/svelte';
-
-	createAIContext();
 
 	let open = $state(false);
 

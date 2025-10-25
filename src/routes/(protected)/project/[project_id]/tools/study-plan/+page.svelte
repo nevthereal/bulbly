@@ -4,18 +4,24 @@
 
 	import { deleteSteps, getStudySteps } from '$lib/remote/tools.remote';
 	import Button, { buttonVariants } from '$lib/components/ui/button/button.svelte';
-	import { Maximize2 } from '@lucide/svelte';
+	import { Maximize2, RefreshCcw } from '@lucide/svelte';
 	import Muted from '$lib/components/Muted.svelte';
-
-	let steps = $derived(getStudySteps());
 </script>
 
-<h1 class="mb-4 text-xl font-bold">Study Plan</h1>
+<div class="flex justify-between">
+	<h1 class="mb-4 text-xl font-bold">Study Plan</h1>
+	<Button
+		variant="ghost"
+		size="icon-sm"
+		title="Refresh steps"
+		onclick={async () => await getStudySteps().refresh()}><RefreshCcw /></Button
+	>
+</div>
 <svelte:boundary>
-	{#if await steps}
+	{#if await getStudySteps()}
 		<Button onclick={async () => await deleteSteps()}>Delete</Button>
 		<ul class="space-y-2 overflow-scroll">
-			{#each await steps as step (step.id)}
+			{#each await getStudySteps() as step (step.id)}
 				<Item.Root variant="outline" class="flex-col items-start gap-2">
 					<Item.Content>
 						<Item.Title
@@ -42,6 +48,8 @@
 			{/each}
 		</ul>
 	{:else}
-		<Muted>No study plan generated yet. Prompt the chat to generate one!</Muted>
+		<Muted
+			>No study plan generated yet. Prompt the chat to generate one or refresh with the button above</Muted
+		>
 	{/if}
 </svelte:boundary>

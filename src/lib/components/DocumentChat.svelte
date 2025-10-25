@@ -8,7 +8,6 @@
 	import Button from './ui/button/button.svelte';
 	import { DefaultChatTransport } from 'ai';
 	import { resolve } from '$app/paths';
-	import { getStudySteps } from '$lib/remote/tools.remote';
 	import type { MyUIMessage } from '$lib/ai';
 
 	let { projectId }: { projectId: string } = $props();
@@ -17,12 +16,7 @@
 		id: `${projectId}-chat`,
 		transport: new DefaultChatTransport({
 			api: resolve('/(protected)/project/[project_id]/api/chat', { project_id: projectId })
-		}),
-		onToolCall: async (p) => {
-			if (p.toolCall.toolName === 'study_plan') {
-				await getStudySteps().refresh();
-			}
-		}
+		})
 	});
 
 	let chatContainer = $state<HTMLElement>();
