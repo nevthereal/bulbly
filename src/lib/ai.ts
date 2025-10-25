@@ -29,4 +29,4 @@ export const tools = { study_plan: studyPlanTool } satisfies ToolSet;
 
 export type ChatTools = InferUITools<typeof tools>;
 
-export type MyUIMessage = UIMessage<ChatTools>;
+export type MyUIMessage = UIMessage<never, never, ChatTools>;
