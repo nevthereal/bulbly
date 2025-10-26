@@ -15,13 +15,16 @@ const studyPlanTool = tool({
 		const { params } = getRequestEvent();
 
 		if (!params.project_id) error(404, 'No project ID');
-		await db.insert(studyPlanStep).values({
-			title: args.title,
-			date: new Date(args.date),
-			projectId: params.project_id,
-			type: args.type,
-			description: args.description
-		});
+		return await db
+			.insert(studyPlanStep)
+			.values({
+				title: args.title,
+				date: new Date(args.date),
+				projectId: params.project_id,
+				type: args.type,
+				description: args.description
+			})
+			.returning();
 	}
 });
 

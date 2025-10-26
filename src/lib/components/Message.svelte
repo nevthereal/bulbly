@@ -6,7 +6,6 @@
 	import { Brain, FileText, ToolCase } from '@lucide/svelte';
 	import { marked } from 'marked';
 	import { fade } from 'svelte/transition';
-	import { buttonVariants } from './ui/button';
 
 	let { message }: { message: MyUIMessage } = $props();
 </script>
@@ -46,25 +45,27 @@
 		</Item.Root>
 	{:else if message.role === 'assistant'}
 		<div in:fade|global>
-			<Accordion.Root type="single">
-				<Accordion.Item value="item-1">
-					<Accordion.Trigger>Tool calls</Accordion.Trigger>
-					<Accordion.Content>
-						<ul class="space-y-2">
-							{#each message.parts as part, partIndex (partIndex)}
-								{#if part.type === 'tool-study_plan'}
-									{#if part.input}
-										<li class="flex items-center gap-2 text-muted-foreground select-none">
-											<ToolCase size={16} />
-											Added study step "{part.input.title}"
-										</li>
+			{#if message.parts.filter((p) => p.type === 'tool-study_plan')}
+				<Accordion.Root type="single">
+					<Accordion.Item value="item-1">
+						<Accordion.Trigger>Tool calls</Accordion.Trigger>
+						<Accordion.Content>
+							<ul class="space-y-2">
+								{#each message.parts as part, partIndex (partIndex)}
+									{#if part.type === 'tool-study_plan'}
+										{#if part.input}
+											<li class="flex items-center gap-2 text-muted-foreground select-none">
+												<ToolCase size={16} />
+												Added {part.input.type} "{part.input.title}"
+											</li>
+										{/if}
 									{/if}
-								{/if}
-							{/each}
-						</ul>
-					</Accordion.Content>
-				</Accordion.Item>
-			</Accordion.Root>
+								{/each}
+							</ul>
+						</Accordion.Content>
+					</Accordion.Item>
+				</Accordion.Root>
+			{/if}
 
 			{#each message.parts as part, partIndex (partIndex)}
 				{#if part.type === 'text'}
