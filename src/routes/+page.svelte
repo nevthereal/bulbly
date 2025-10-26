@@ -11,31 +11,36 @@
 
 <div class="px-6">
 	<svelte:boundary>
-		{#if await getUser()}
-			<Button href="/create" class="mb-4"><Plus /> Create project</Button>
-			{#each await getSubjectsWithProjects() as sub (sub.id)}
-				<div class="mb-2">
-					<h1 class="mb-2 text-xl">{sub.title}:</h1>
-					<Item.Group class="grid grid-cols-4 gap-2">
-						{#each sub.projects as prj (prj.id)}
-							<Item.Root variant="outline">
-								{#snippet child({ props })}
-									<a
-										href={resolve(`/(protected)/project/[project_id]`, { project_id: prj.id })}
-										{...props}
-									>
-										<Item.Title>
-											{prj.name}
-										</Item.Title>
-									</a>
-								{/snippet}
-							</Item.Root>
-						{:else}
-							<Muted>No projects in subject</Muted>
-						{/each}
-					</Item.Group>
-				</div>
-			{/each}
+		{@const user = await getUser()}
+		{#if user}
+			{#if user.isApproved}
+				<Button href="/create" class="mb-4"><Plus /> Create project</Button>
+				{#each await getSubjectsWithProjects() as sub (sub.id)}
+					<div class="mb-2">
+						<h1 class="mb-2 text-xl">{sub.title}:</h1>
+						<Item.Group class="grid grid-cols-4 gap-2">
+							{#each sub.projects as prj (prj.id)}
+								<Item.Root variant="outline">
+									{#snippet child({ props })}
+										<a
+											href={resolve(`/(protected)/project/[project_id]`, { project_id: prj.id })}
+											{...props}
+										>
+											<Item.Title>
+												{prj.name}
+											</Item.Title>
+										</a>
+									{/snippet}
+								</Item.Root>
+							{:else}
+								<Muted>No projects in subject</Muted>
+							{/each}
+						</Item.Group>
+					</div>
+				{/each}
+			{:else}
+				<p class="mt-8 text-center font-mono">Your account is not approved. Please request.</p>
+			{/if}
 		{:else}
 			<p>Home Page</p>
 		{/if}

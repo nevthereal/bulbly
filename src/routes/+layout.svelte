@@ -9,7 +9,6 @@
 	import Button, { buttonVariants } from '$lib/components/ui/button/button.svelte';
 	import { getUser } from '$lib/remote/auth.remote';
 	import ModeToggle from '$lib/components/ModeToggle.svelte';
-	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	let { children } = $props();
 </script>
@@ -25,7 +24,7 @@
 
 <nav class="flex h-[10dvh] items-center justify-between px-4">
 	<a href="/" class="items-cnter flex text-3xl font-black tracking-tighter"
-		><img src={Logo} alt="logo" class="mr-2 h-8" /> pontiq</a
+		><img src={Logo} alt="logo" class="mr-2 h-8" /> pontiq (⍺)</a
 	>
 	{#if await getUser()}
 		<a class="font-medium" href={resolve('/(protected)/explorer')}>Explorer</a>
