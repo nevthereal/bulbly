@@ -9,7 +9,7 @@
 	import { Chat } from '@ai-sdk/svelte';
 	import Spinner from './ui/spinner/spinner.svelte';
 	import Toggle from './ui/toggle/toggle.svelte';
-	import type { MyUIMessage } from '$lib/ai';
+	import type { MyUIMessage } from '$lib/server/ai';
 
 	let { chat }: { chat: Chat<MyUIMessage> } = $props();
 

@@ -1,29 +1,18 @@
 <script lang="ts">
-	import {
-		CircleFadingPlus,
-		Ellipsis,
-		FileText,
-		SquareArrowUpRight,
-		Trash2,
-		Upload,
-		Workflow
-	} from '@lucide/svelte';
+	import { Trash2, Upload, Workflow } from '@lucide/svelte';
 
 	import Input from './ui/input/input.svelte';
 	import Button, { buttonVariants } from './ui/button/button.svelte';
 	import * as Dialog from '$lib/components/ui/dialog';
-	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
-	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 
 	import { generateSvelteHelpers } from '@uploadthing/svelte';
 	import type { MyRouter } from '$lib/server/uploadthing';
-	import { deleteFile, getFiles } from '$lib/remote/files.remote';
+	import { getFiles } from '$lib/remote/files.remote';
 	import { toast } from 'svelte-sonner';
-	import { attachments } from '$lib/chat.svelte';
 	import Loading from './Loading.svelte';
-	import { browser } from '$app/environment';
 	import Spinner from './ui/spinner/spinner.svelte';
 	import Muted from './Muted.svelte';
+	import File from './File.svelte';
 
 	let filesToBeUploaded: FileList | undefined = $state(undefined);
 	let uploadProgress: number | null = $state(null);
@@ -55,85 +44,23 @@
 	</h1>
 	<h2 class="my-2 font-medium">Your files:</h2>
 	<div class="mb-2 flex-1 overflow-y-auto">
-		{#if browser}
-			<svelte:boundary>
-				{#snippet pending()}
-					<Loading thing="files" />
-				{/snippet}
-				{#snippet failed(e)}
-					{JSON.stringify(e)}
-				{/snippet}
-				<ul class="grid grid-cols-2 gap-2">
-					{#each await getFiles() as file (file.id)}
-						{@const extension = file.name.includes('.')
-							? file.name.substring(file.name.lastIndexOf('.') + 1)
-							: ''}
-						{@const slicedName = extension
-							? `${file.name.slice(0, 5)}...${extension}`
-							: file.name.slice(0, 8) + '...'}
-						<li class="flex flex-col justify-between gap-2 rounded-md border p-2">
-							<div class="relative h-full">
-								<DropdownMenu.Root>
-									<DropdownMenu.Trigger
-										class={buttonVariants({
-											class: 'absolute top-2 right-2',
-											size: 'icon',
-											variant: 'secondary'
-										})}><Ellipsis /></DropdownMenu.Trigger
-									>
-									<DropdownMenu.Content>
-										<DropdownMenu.Group>
-											<DropdownMenu.Label>File</DropdownMenu.Label>
-											<DropdownMenu.Separator />
-
-											<DropdownMenu.Item onclick={() => attachments.add(file)}
-												><CircleFadingPlus /> Add file to Chat</DropdownMenu.Item
-											>
-											<a href={file.utURL} target="_blank">
-												<DropdownMenu.Item>
-													<SquareArrowUpRight /> Open file
-												</DropdownMenu.Item>
-											</a>
-											<DropdownMenu.Item
-												onclick={async () =>
-													toast.promise(deleteFile(file.id), {
-														loading: 'Deleting file...',
-														success: 'Successfully deleted file',
-														error: (e) => `Something went wrong? ${e}`
-													})}
-												variant="destructive"><Trash2 />Delete File</DropdownMenu.Item
-											>
-										</DropdownMenu.Group>
-									</DropdownMenu.Content>
-								</DropdownMenu.Root>
-
-								{#if file.type === 'image/jpeg' || file.type === 'image/png'}
-									<img src={file.utURL} alt={file.name} class="rounded-sm" />
-								{:else if file.type === 'application/pdf'}
-									<div class="flex h-full items-center justify-center rounded-sm bg-muted">
-										<FileText class="size-20 text-muted-foreground" />
-									</div>
-								{/if}
-							</div>
-							<Tooltip.Provider>
-								<Tooltip.Root delayDuration={100}>
-									<Tooltip.Trigger class="overflow-x-scroll font-mono text-xs"
-										>{slicedName}</Tooltip.Trigger
-									>
-									<Tooltip.Content>
-										<p>{file.name}</p>
-									</Tooltip.Content>
-								</Tooltip.Root>
-							</Tooltip.Provider>
-						</li>
-					{:else}
-						<Muted class="col-span-2 text-xs text-muted-foreground"
-							>No files yet. Upload some below</Muted
-						>
-					{/each}
-				</ul>
-			</svelte:boundary>
-		{/if}
+		<svelte:boundary onerror={(e) => console.error(e)}>
+			{#snippet pending()}
+				<Loading thing="files" />
+			{/snippet}
+			{#snippet failed(e)}
+				{JSON.stringify(e)}
+			{/snippet}
+			<ul class="grid grid-cols-2 gap-2">
+				{#each await getFiles() as file (file.id)}
+					<File {file} />
+				{:else}
+					<Muted class="col-span-2 text-xs text-muted-foreground"
+						>No files yet. Upload some below</Muted
+					>
+				{/each}
+			</ul>
+		</svelte:boundary>
 	</div>
 	<Dialog.Root bind:open>
 		<Dialog.Trigger class={buttonVariants()}>Add files to Knowledge Base</Dialog.Trigger>

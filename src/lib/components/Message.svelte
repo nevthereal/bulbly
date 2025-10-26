@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as Accordion from '$lib/components/ui/accordion/index.js';
 
-	import type { MyUIMessage } from '$lib/ai';
+	import type { MyUIMessage } from '$lib/server/ai';
 	import * as Item from '$lib/components/ui/item/index.js';
 	import { Brain, FileText, ToolCase } from '@lucide/svelte';
 	import { marked } from 'marked';

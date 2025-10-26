@@ -1,6 +1,6 @@
-import { type MyUIMessage, tools } from '$lib/ai.js';
-import type { chatConfig } from '$lib/chat.svelte.js';
-import { gateway } from '$lib/server/utils.js';
+import { type MyUIMessage, tools } from '$lib/server/ai';
+import type { chatConfig } from '$lib/chat.svelte';
+import { gateway } from '$lib/server/utils';
 import { error } from '@sveltejs/kit';
 import { streamText, convertToModelMessages, stepCountIs } from 'ai';
 

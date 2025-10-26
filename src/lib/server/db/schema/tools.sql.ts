@@ -1,6 +1,15 @@
 import { pgEnum, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 import { project } from './projects.sql';
-import { studyStepTypes } from '../../../zod';
+
+export const studyStepTypes = [
+	'milestone',
+	'lesson',
+	'assignment',
+	'project',
+	'exam',
+	'review',
+	'break'
+] as const;
 
 export const typeEnum = pgEnum('study_plan_types', studyStepTypes);
 

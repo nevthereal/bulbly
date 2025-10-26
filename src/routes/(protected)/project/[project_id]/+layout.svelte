@@ -21,7 +21,7 @@
 				<Skeleton class="h-lh w-48 rounded-full" />
 			{/snippet}
 			<h1 class="text-3xl font-bold">
-				{(await getProject()).name}
+				{(await getProject(params.project_id)).name}
 			</h1>
 			<div class="flex items-center gap-2">
 				<AlertDialog.Root>

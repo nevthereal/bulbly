@@ -8,7 +8,7 @@
 	import Button from './ui/button/button.svelte';
 	import { DefaultChatTransport } from 'ai';
 	import { resolve } from '$app/paths';
-	import type { MyUIMessage } from '$lib/ai';
+	import type { MyUIMessage } from '$lib/server/ai';
 
 	let { projectId }: { projectId: string } = $props();
 

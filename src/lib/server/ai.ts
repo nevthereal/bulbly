@@ -1,9 +1,20 @@
 import { tool, type InferUITools, type ToolSet, type UIMessage } from 'ai';
-import { zStudyStep } from './zod';
 import { getRequestEvent } from '$app/server';
 import { error } from '@sveltejs/kit';
-import { db } from './server/db';
-import { studyPlanStep } from './server/db/schema';
+import { db } from './db';
+import { studyPlanStep, studyStepTypes } from './db/schema';
+import z from 'zod';
+
+const zStudyStep = z.object({
+	title: z
+		.string()
+		.describe(
+			'Short description/Name of the step of the studyplan. Please do not include stuff like "lesson:" or "assignment" or "revision" in here. The title should be short and about the thing to study about.'
+		),
+	date: z.iso.datetime().describe('When the step should be commenced in ISO 8601 datetime format'),
+	description: z.string().describe('More detailed information about the step'),
+	type: z.enum(studyStepTypes)
+});
 
 const studyPlanTool = tool({
 	description:

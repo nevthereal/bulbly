@@ -35,12 +35,8 @@ export const getSubjects = query(async () => {
 	return subjects;
 });
 
-export const getProject = query(async () => {
+export const getProject = query(z.string(), async (id) => {
 	const user = await requireAuth();
-
-	const id = getRequestEvent().params.project_id;
-
-	if (!id) error(401);
 
 	const project = await db.query.project.findFirst({
 		where: {
