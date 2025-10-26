@@ -33,4 +33,4 @@ jobs:
       - name: Push database schema (Drizzle)
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: pnpm db:push
+        run: pnpm db:push --force
