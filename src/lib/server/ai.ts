@@ -4,6 +4,8 @@ import { error } from '@sveltejs/kit';
 import { db } from './db';
 import { studyPlanStep, studyStepTypes } from './db/schema';
 import z from 'zod';
+import Exa from 'exa-js';
+import { EXA_API_KEY } from '$env/static/private';
 
 const zStudyStep = z.object({
 	title: z
@@ -14,6 +16,28 @@ const zStudyStep = z.object({
 	date: z.iso.datetime().describe('When the step should be commenced in ISO 8601 datetime format'),
 	description: z.string().describe('More detailed information about the step'),
 	type: z.enum(studyStepTypes)
+});
+
+export const exa = new Exa(EXA_API_KEY);
+
+const webSearchTool = tool({
+	name: 'web_search',
+	description: 'Search the web for up-to-date information',
+	inputSchema: z.object({
+		query: z.string().min(1).max(100).describe('The search query')
+	}),
+	execute: async ({ query }) => {
+		const { results } = await exa.searchAndContents(query, {
+			livecrawl: 'always',
+			numResults: 3
+		});
+		return results.map((result) => ({
+			title: result.title,
+			url: result.url,
+			content: result.text.slice(0, 1000), // take just the first 1000 characters
+			publishedDate: result.publishedDate
+		}));
+	}
 });
 
 const studyPlanTool = tool({
@@ -39,7 +63,7 @@ const studyPlanTool = tool({
 	}
 });
 
-export const tools = { study_plan: studyPlanTool } satisfies ToolSet;
+export const tools = { study_plan: studyPlanTool, web_search: webSearchTool } satisfies ToolSet;
 
 export type ChatTools = InferUITools<typeof tools>;
 

@@ -1,18 +1,14 @@
-import { command, getRequestEvent, query } from '$app/server';
+import { command, query } from '$app/server';
 import { eq } from 'drizzle-orm';
 import { db } from '$lib/server/db';
-import { error } from '@sveltejs/kit';
 import { studyPlanStep } from '$lib/server/db/schema/tools.sql';
 import { requireAuth } from './auth.remote';
+import z from 'zod';
 
-export const getStudySteps = query(async () => {
-	const { params } = getRequestEvent();
-
-	if (!params.project_id) error(404);
-
+export const getStudySteps = query(z.string(), async (projectId) => {
 	const steps = await db.query.studyPlanStep.findMany({
 		where: {
-			projectId: params.project_id
+			projectId
 		},
 		orderBy: {
 			date: 'asc'
@@ -24,13 +20,10 @@ export const getStudySteps = query(async () => {
 	return steps;
 });
 
-export const deleteSteps = command(async () => {
+export const deleteSteps = command(z.string(), async (projectId) => {
 	await requireAuth();
-	const { params } = getRequestEvent();
 
-	if (!params.project_id) error(404);
+	await db.delete(studyPlanStep).where(eq(studyPlanStep.projectId, projectId));
 
-	await db.delete(studyPlanStep).where(eq(studyPlanStep.projectId, params.project_id));
-
-	getStudySteps().refresh();
+	getStudySteps(projectId).refresh();
 });

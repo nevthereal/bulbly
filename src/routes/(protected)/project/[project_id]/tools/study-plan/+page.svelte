@@ -6,6 +6,8 @@
 	import Button, { buttonVariants } from '$lib/components/ui/button/button.svelte';
 	import { Maximize2, RefreshCcw } from '@lucide/svelte';
 	import Muted from '$lib/components/Muted.svelte';
+
+	let { params } = $props();
 </script>
 
 <div class="flex justify-between">
@@ -14,14 +16,14 @@
 		variant="ghost"
 		size="icon-sm"
 		title="Refresh steps"
-		onclick={async () => await getStudySteps().refresh()}><RefreshCcw /></Button
+		onclick={async () => await getStudySteps(params.project_id).refresh()}><RefreshCcw /></Button
 	>
 </div>
 <svelte:boundary>
-	{#if await getStudySteps()}
-		<Button onclick={async () => await deleteSteps()}>Delete</Button>
+	{#if await getStudySteps(params.project_id)}
+		<Button onclick={async () => await deleteSteps(params.project_id)}>Delete</Button>
 		<ul class="space-y-2 overflow-scroll">
-			{#each await getStudySteps() as step (step.id)}
+			{#each await getStudySteps(params.project_id) as step (step.id)}
 				<Item.Root variant="outline" class="flex-col items-start gap-2">
 					<Item.Content>
 						<Item.Title

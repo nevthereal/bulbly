@@ -3,7 +3,7 @@
 
 	import type { MyUIMessage } from '$lib/server/ai';
 	import * as Item from '$lib/components/ui/item/index.js';
-	import { Brain, FileText, ToolCase } from '@lucide/svelte';
+	import { Brain, FileText, Globe, ToolCase } from '@lucide/svelte';
 	import { marked } from 'marked';
 	import { fade } from 'svelte/transition';
 
@@ -45,27 +45,29 @@
 		</Item.Root>
 	{:else if message.role === 'assistant'}
 		<div in:fade|global>
-			{#if message.parts.filter((p) => p.type === 'tool-study_plan')}
-				<Accordion.Root type="single">
-					<Accordion.Item value="item-1">
-						<Accordion.Trigger>Tool calls</Accordion.Trigger>
-						<Accordion.Content>
-							<ul class="space-y-2">
-								{#each message.parts as part, partIndex (partIndex)}
-									{#if part.type === 'tool-study_plan'}
-										{#if part.input}
-											<li class="flex items-center gap-2 text-muted-foreground select-none">
-												<ToolCase size={16} />
-												Added {part.input.type} "{part.input.title}"
-											</li>
-										{/if}
+			<Accordion.Root type="single">
+				<Accordion.Item value="item-1">
+					<Accordion.Trigger>Tool calls</Accordion.Trigger>
+					<Accordion.Content>
+						<ul class="space-y-2">
+							{#each message.parts as part, partIndex (partIndex)}
+								{#if part.type === 'tool-study_plan'}
+									{#if part.input}
+										<li class="flex items-center gap-2 text-muted-foreground select-none">
+											<ToolCase size={16} />
+											Added {part.input.type} "{part.input.title}"
+										</li>
 									{/if}
-								{/each}
-							</ul>
-						</Accordion.Content>
-					</Accordion.Item>
-				</Accordion.Root>
-			{/if}
+								{:else if part.type === 'tool-web_search'}
+									<li class="flex items-center gap-2 text-muted-foreground select-none">
+										<Globe size={16} /> Searched for "{part.input?.query}"
+									</li>
+								{/if}
+							{/each}
+						</ul>
+					</Accordion.Content>
+				</Accordion.Item>
+			</Accordion.Root>
 
 			{#each message.parts as part, partIndex (partIndex)}
 				{#if part.type === 'text'}
