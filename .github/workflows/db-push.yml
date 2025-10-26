@@ -9,15 +9,17 @@ jobs:
   push-db:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v5
 
-      - name: Setup PNPM
+      - name: Setup pnpm (uses version from package.json's packageManager)
         uses: pnpm/action-setup@v4
         with:
-          version: 9
+          run_install: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -28,13 +30,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # Optional: generate types before pushing, if you rely on it
-      # - name: Generate Drizzle types
-      #   run: pnpm drizzle:generate
-
       - name: Push database schema (Drizzle)
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          # Add other required envs if needed, e.g.:
-          # POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         run: pnpm db:push
