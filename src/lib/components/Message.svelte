@@ -56,7 +56,7 @@
 										{#if part.input}
 											<li class="flex items-center gap-2 text-muted-foreground select-none">
 												<ToolCase size={16} />
-												Added study step "{part.input.title}"
+												Added {part.input.type} "{part.input.title}"
 											</li>
 										{/if}
 									{/if}
