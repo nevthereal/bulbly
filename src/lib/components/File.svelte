@@ -17,8 +17,6 @@
 	const slicedName = $derived(
 		extension ? `${file.name.slice(0, 5)}...${extension}` : file.name.slice(0, 8) + '...'
 	);
-
-	const isInChat = $derived(attachments.files.includes(file));
 </script>
 
 <li class="flex flex-col justify-between gap-2 rounded-md border p-2" title={file.name}>
@@ -36,7 +34,9 @@
 					<DropdownMenu.Label>File</DropdownMenu.Label>
 					<DropdownMenu.Separator />
 
-					<DropdownMenu.Item disabled={isInChat} onclick={() => attachments.add(file)}
+					<DropdownMenu.Item
+						disabled={attachments.isInChat(file)}
+						onclick={() => attachments.add(file)}
 						><CircleFadingPlus /> Add file to Chat</DropdownMenu.Item
 					>
 					<a href={file.utURL} target="_blank">
