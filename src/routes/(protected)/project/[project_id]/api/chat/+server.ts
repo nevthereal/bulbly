@@ -1,6 +1,6 @@
-import { type MyUIMessage, tools } from '$lib/ai.js';
-import type { chatConfig } from '$lib/chat.svelte.js';
-import { gateway } from '$lib/server/utils.js';
+import { type MyUIMessage, tools } from '$lib/server/ai';
+import type { chatConfig } from '$lib/chat.svelte';
+import { gateway } from '$lib/server/utils';
 import { error } from '@sveltejs/kit';
 import { streamText, convertToModelMessages, stepCountIs } from 'ai';
 
@@ -76,7 +76,7 @@ export async function POST({ request, locals }) {
 		await request.json();
 
 	const result = streamText({
-		model: gateway('openai/gpt-5-mini'),
+		model: gateway('anthropic/claude-haiku-4.5'),
 		messages: convertToModelMessages(messages),
 		system: config.studyModeEnabled ? STUDY_MODE_PROMPT : DEFAULT_SYS_PROMPT,
 		tools,

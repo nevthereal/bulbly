@@ -1,4 +1,4 @@
-import { command, getRequestEvent, query } from '$app/server';
+import { command, query } from '$app/server';
 import { eq, and } from 'drizzle-orm';
 import { error } from '@sveltejs/kit';
 import { requireAuth } from './auth.remote';
@@ -9,15 +9,13 @@ import { utapi } from '$lib/server/uploadthing';
 import { DrizzleError } from 'drizzle-orm/errors';
 import { UploadThingError } from 'uploadthing/server';
 
-export const getFiles = query(async () => {
+export const getFiles = query(z.string(), async (projectId) => {
 	const user = await requireAuth();
-	const { params } = getRequestEvent();
-	if (!params.project_id) throw error(404);
 
 	return await db
 		.select()
 		.from(file)
-		.where(and(eq(file.projectId, params.project_id), eq(file.ownerId, user.id)));
+		.where(and(eq(file.projectId, projectId), eq(file.ownerId, user.id)));
 });
 
 export const deleteFile = command(z.uuid(), async (fileId) => {
@@ -40,7 +38,7 @@ export const deleteFile = command(z.uuid(), async (fileId) => {
 		await db.delete(file).where(eq(file.id, fileId));
 
 		// 4) Refresh cache
-		await getFiles().refresh();
+		await getFiles(f.projectId).refresh();
 	} catch (err) {
 		if (err instanceof DrizzleError) throw error(500, err.message);
 		if (err instanceof UploadThingError) throw error(500, err.message);

@@ -5,11 +5,18 @@ class Attachments {
 	private attachments: File[] = $state([]);
 
 	add(file: File) {
-		this.attachments.push(file);
+		// Avoid identity comparisons on $state proxies; ensure uniqueness by id
+		if (!this.attachments.some((a) => a.id === file.id)) {
+			this.attachments.push(file);
+		}
 	}
 
 	get files() {
 		return this.attachments;
+	}
+
+	isInChat(file: File) {
+		return this.attachments.some((a) => a.id === file.id);
 	}
 
 	remove(id: string) {

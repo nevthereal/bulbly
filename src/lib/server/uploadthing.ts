@@ -19,13 +19,14 @@ export const myRouter = {
 			 * For full list of options and defaults, see the File Route API reference
 			 * @see https://docs.uploadthing.com/file-routes#route-config
 			 */
-			maxFileSize: '512MB',
-			maxFileCount: 20
+			maxFileSize: '16MB',
+			maxFileCount: 10
 		},
 		pdf: {
-			maxFileSize: '1GB',
-			maxFileCount: 20
-		}
+			maxFileSize: '128MB',
+			maxFileCount: 10
+		},
+		text: { maxFileCount: 10 }
 	})
 		// Set permissions and file types for this FileRoute
 		.middleware(async () => {
