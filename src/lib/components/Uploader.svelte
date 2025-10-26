@@ -30,6 +30,9 @@
 			uploadProgress = null;
 			toast.success('Upload Completed');
 			open = false;
+		},
+		onUploadError: (e) => {
+			toast.error(e.message);
 		}
 	});
 </script>
@@ -40,7 +43,7 @@
 		<Dialog.Header>
 			<Dialog.Title>Upload files</Dialog.Title>
 		</Dialog.Header>
-		<Input accept="image/*,.pdf" type="file" multiple bind:files={filesToBeUploaded} />
+		<Input accept="image/*,.pdf,text/*" type="file" multiple bind:files={filesToBeUploaded} />
 		{#if filesToBeUploaded}
 			{@const arrayedFiles = Array.from(filesToBeUploaded)}
 			<ul>
