@@ -10,6 +10,7 @@
 	import Input from '$lib/components/ui/input/input.svelte';
 	import Loading from '$lib/components/Loading.svelte';
 	import Muted from '$lib/components/Muted.svelte';
+	import { resolve } from '$app/paths';
 </script>
 
 <main class="px-6">
@@ -21,10 +22,15 @@
 				<Loading thing="subjects and projects" />
 			{/snippet}
 			<div class="grid grid-cols-4 gap-4">
-{#each (await getSubjectsWithProjects()).filter((s) => s.pinned !== true) as sub (sub.id)}
+				{#each await getSubjectsWithProjects() as sub (sub.id)}
 					<div class="rounded-lg border p-4">
 						<div class="flex items-center justify-between gap-2">
-							<h2 class="text-xl font-semibold">{sub.title}:</h2>
+							<h2 class="text-xl font-semibold">
+								{sub.title}
+								{#if sub.pinned}
+									<span>(pinned)</span>
+								{/if}:
+							</h2>
 							<div class="flex items-center gap-2">
 								<Dialog.Root>
 									<Dialog.Trigger class={buttonVariants({ variant: 'outline', size: 'sm' })}
@@ -104,7 +110,11 @@
 						</div>
 						<ul class="list-inside list-disc">
 							{#each sub.projects as proj (proj.id)}
-								<li>{proj.name}</li>
+								<li>
+									<a href={resolve('/(protected)/project/[project_id]', { project_id: proj.id })}>
+										{proj.name}
+									</a>
+								</li>
 							{:else}
 								<Muted>No projects in subject</Muted>
 							{/each}
