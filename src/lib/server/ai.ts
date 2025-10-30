@@ -63,7 +63,27 @@ const studyPlanTool = tool({
 	}
 });
 
-export const tools = { study_plan: studyPlanTool, web_search: webSearchTool } satisfies ToolSet;
+const flashCardTool = tool({
+	description: 'Create flashcards from given files',
+	inputSchema: z.object({
+		term: z.string(),
+		definition: z.string()
+	}),
+	name: 'study_plan',
+
+	execute: async (args) => {
+		const { params } = getRequestEvent();
+
+		if (!params.project_id) error(404, 'No project ID');
+		console.log(args);
+	}
+});
+
+export const tools = {
+	study_plan: studyPlanTool,
+	web_search: webSearchTool,
+	flashcards: flashCardTool
+} satisfies ToolSet;
 
 export type ChatTools = InferUITools<typeof tools>;
 

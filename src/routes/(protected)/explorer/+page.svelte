@@ -111,7 +111,7 @@
 						<ul class="list-inside list-disc">
 							{#each sub.projects as proj (proj.id)}
 								<li>
-									<a href={resolve('/(protected)/project/[project_id]', { project_id: proj.id })}>
+									<a href={resolve('/(protected)/projects/[project_id]', { project_id: proj.id })}>
 										{proj.name}
 									</a>
 								</li>

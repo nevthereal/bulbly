@@ -9,6 +9,7 @@
 	import { goto } from '$app/navigation';
 	import { toast } from 'svelte-sonner';
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js';
+	import { resolve } from '$app/paths';
 
 	let { params, children } = $props();
 </script>
@@ -41,7 +42,7 @@
 							<AlertDialog.Action
 								onclick={() =>
 									toast.promise(
-										deleteProject(params.project_id).then(() => goto('/')),
+										deleteProject(params.project_id).then(() => goto(resolve('/'))),
 										{
 											loading: 'Deleting project…',
 											success: 'Deletion sucessful',
@@ -57,7 +58,6 @@
 		</svelte:boundary>
 	</div>
 
-	<div class="flex items-center justify-between"></div>
 	<div class="flex h-full gap-4 overflow-scroll">
 		<KnowledgeBase projectId={params.project_id} />
 		<DocumentChat projectId={params.project_id} />

@@ -17,7 +17,7 @@
 	const uploadManager = new UploadManager();
 
 	const { createUploadThing } = generateSvelteHelpers<MyRouter>({
-		url: resolve('/(protected)/project/[project_id]/upload', { project_id: projectId })
+		url: resolve('/(protected)/projects/[project_id]/upload', { project_id: projectId })
 	});
 
 	const { startUpload } = createUploadThing('uploader', {

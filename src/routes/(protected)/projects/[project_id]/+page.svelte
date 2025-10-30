@@ -8,7 +8,7 @@
 <Item.Group class="mt-4 space-y-2">
 	<Item.Root variant="outline">
 		{#snippet child({ props })}
-			<a href={resolve('/(protected)/project/[project_id]/tools/study-plan', params)} {...props}>
+			<a href={resolve('/(protected)/projects/[project_id]/tools/study-plan', params)} {...props}>
 				<Item.Media class="max-lg:hidden" variant="icon">
 					<NotebookPen />
 				</Item.Media>
@@ -18,7 +18,7 @@
 	</Item.Root>
 	<Item.Root variant="outline">
 		{#snippet child({ props })}
-			<a href={resolve('/(protected)/project/[project_id]/tools/flashcards', params)} {...props}>
+			<a href={resolve('/(protected)/projects/[project_id]/tools/flashcards', params)} {...props}>
 				<Item.Media class="max-lg:hidden" variant="icon">
 					<CreditCard />
 				</Item.Media>

@@ -76,7 +76,7 @@ export async function POST({ request, locals }) {
 		await request.json();
 
 	const result = streamText({
-		model: gateway('openai/gpt-5'),
+		model: gateway('anthropic/claude-haiku-4.5'),
 		messages: convertToModelMessages(messages),
 		system: config.studyModeEnabled ? STUDY_MODE_PROMPT : DEFAULT_SYS_PROMPT,
 		tools,
