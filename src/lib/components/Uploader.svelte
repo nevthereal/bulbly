@@ -5,13 +5,14 @@
 	import type { MyRouter } from '$lib/server/uploadthing';
 	import Input from './ui/input/input.svelte';
 	import Button, { buttonVariants } from './ui/button/button.svelte';
-	import Spinner from './ui/spinner/spinner.svelte';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { Trash2, Upload } from '@lucide/svelte';
 	import { getFiles } from '$lib/remote/files.remote';
-	import { UploadManager } from './upload.svelte';
+	import { UploadManager } from '../upload.svelte';
 
 	let { projectId }: { projectId: string } = $props();
+
+	let open = $state(false);
 
 	const uploadManager = new UploadManager();
 
@@ -19,7 +20,7 @@
 		url: resolve('/(protected)/project/[project_id]/upload', { project_id: projectId })
 	});
 
-	const { startUpload, isUploading } = createUploadThing('uploader', {
+	const { startUpload } = createUploadThing('uploader', {
 		onUploadProgress: (progress) => {
 			uploadManager.setProgress(progress);
 		},
@@ -34,7 +35,7 @@
 	});
 </script>
 
-<Dialog.Root>
+<Dialog.Root bind:open>
 	<Dialog.Trigger class={buttonVariants()}>Add files to Knowledge Base</Dialog.Trigger>
 	<Dialog.Content>
 		<Dialog.Header>
@@ -50,26 +51,31 @@
 			}}
 		/>
 		{#if uploadManager.hasFiles}
-			<ul>
-				{#each uploadManager.files as f (f.name)}
-					<li class="my-1 flex items-center justify-between">
-						<span class="flex-shrink overflow-x-scroll">
-							{f.name}
-						</span>
-						<Button
-							size="icon"
-							variant="destructive"
-							onclick={() => uploadManager.removeFile(f.name)}
-						>
-							<Trash2 />
-						</Button>
-					</li>
-				{/each}
-			</ul>
+			<div class="overflow-x-hidden">
+				<ul>
+					{#each uploadManager.files as f (f.name)}
+						<li class="my-1 flex items-center justify-between gap-2">
+							<div class="min-w-0 flex-1 overflow-x-auto">
+								<span class="whitespace-nowrap">
+									{f.name}
+								</span>
+							</div>
+							<Button
+								size="icon"
+								variant="destructive"
+								class="flex-shrink-0"
+								onclick={() => uploadManager.removeFile(f.name)}
+							>
+								<Trash2 />
+							</Button>
+						</li>
+					{/each}
+				</ul>
+			</div>
 
 			<Dialog.Close
 				class={buttonVariants()}
-				disabled={$isUploading || uploadManager.isEmpty}
+				disabled={uploadManager.isEmpty}
 				onclick={() =>
 					toast.promise(
 						startUpload(uploadManager.files).then(() => getFiles(projectId).refresh()),
@@ -80,11 +86,7 @@
 						}
 					)}
 			>
-				{#if !$isUploading}
-					<Upload /> Upload
-				{:else}
-					<Spinner /> Uploading {uploadManager.progress?.toFixed(0)}%
-				{/if}
+				<Upload /> Upload
 			</Dialog.Close>
 		{/if}
 	</Dialog.Content>
