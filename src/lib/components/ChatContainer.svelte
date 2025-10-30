@@ -63,7 +63,7 @@
 		{/if}
 
 		<div class="mt-2 flex-shrink-0">
-			<ChatInput {chat} />
+			<ChatInput {projectId} {chat} />
 		</div>
 	</div>
 </div>
