@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { ArrowUpIcon, Ellipsis, GraduationCap, Info, Trash2 } from '@lucide/svelte';
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+	import { ArrowUpIcon, GraduationCap, Plus, Trash2 } from '@lucide/svelte';
 	import * as InputGroup from '$lib/components/ui/input-group/index.js';
 	import * as ButtonGroup from '$lib/components/ui/button-group/index.js';
-	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 
 	import { attachments, chatConfig } from '$lib/chat.svelte';
 
@@ -10,8 +10,10 @@
 	import Spinner from './ui/spinner/spinner.svelte';
 	import Toggle from './ui/toggle/toggle.svelte';
 	import type { MyUIMessage } from '$lib/server/ai';
+	import { buttonVariants } from './ui/button';
+	import { getFiles } from '$lib/remote/files.remote';
 
-	let { chat }: { chat: Chat<MyUIMessage> } = $props();
+	let { chat, projectId }: { chat: Chat<MyUIMessage>; projectId: string } = $props();
 
 	let input = $state('');
 
@@ -37,33 +39,42 @@
 <form onsubmit={handleSubmit} class="absolute bottom-0 w-full backdrop-blur-sm">
 	<InputGroup.Root>
 		<InputGroup.Input bind:value={input} placeholder="Ask, Search or Chat..." />
-		{#if attachments.files.length != 0}
-			<InputGroup.Addon align="block-start">
-				{#each attachments.files as att (att.id)}
-					<ButtonGroup.Root>
-						<ButtonGroup.Text>
-							{att.name}
-						</ButtonGroup.Text>
-						<InputGroup.Button
-							variant="destructive"
-							size="icon-xs"
-							onclick={() => attachments.remove(att.id)}><Trash2 /></InputGroup.Button
-						>
-					</ButtonGroup.Root>
-				{:else}
-					<InputGroup.Text
-						>No files in Chat<Tooltip.Provider>
-							<Tooltip.Root delayDuration={100}>
-								<Tooltip.Trigger><Info /></Tooltip.Trigger>
-								<Tooltip.Content class="flex">
-									Tap on the <Ellipsis class="h-lh" /> of a file to add it to the chat
-								</Tooltip.Content>
-							</Tooltip.Root>
-						</Tooltip.Provider></InputGroup.Text
+
+		<InputGroup.Addon align="block-start">
+			<DropdownMenu.Root>
+				<DropdownMenu.Trigger class={buttonVariants({ size: 'icon-sm', variant: 'outline' })}
+					><Plus /></DropdownMenu.Trigger
+				>
+				<DropdownMenu.Content>
+					<DropdownMenu.Group>
+						<DropdownMenu.Label>Select files to add to chat</DropdownMenu.Label>
+						<DropdownMenu.Separator />
+						{#each await getFiles(projectId) as file (file.id)}
+							<DropdownMenu.CheckboxItem
+								bind:checked={() => attachments.isInChat(file), () => attachments.add(file)}
+								>{file.name}</DropdownMenu.CheckboxItem
+							>
+						{/each}
+					</DropdownMenu.Group>
+				</DropdownMenu.Content>
+			</DropdownMenu.Root>
+
+			{#each attachments.files as att (att.id)}
+				<ButtonGroup.Root>
+					<ButtonGroup.Text>
+						{att.name}
+					</ButtonGroup.Text>
+					<InputGroup.Button
+						variant="destructive"
+						size="icon-xs"
+						onclick={() => attachments.remove(att.id)}><Trash2 /></InputGroup.Button
 					>
-				{/each}
-			</InputGroup.Addon>
-		{/if}
+				</ButtonGroup.Root>
+			{:else}
+				<InputGroup.Text>No files in Chat</InputGroup.Text>
+			{/each}
+		</InputGroup.Addon>
+
 		<InputGroup.Addon align="block-end">
 			<Toggle
 				bind:pressed={

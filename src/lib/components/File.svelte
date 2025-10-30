@@ -20,11 +20,11 @@
 </script>
 
 <li class="flex flex-col justify-between gap-2 rounded-md border p-2" title={file.name}>
-	<div class="relative h-full">
+	<div class="relative aspect-square overflow-hidden rounded-sm">
 		<DropdownMenu.Root>
 			<DropdownMenu.Trigger
 				class={buttonVariants({
-					class: 'absolute top-2 right-2',
+					class: 'absolute top-2 right-2 z-10',
 					size: 'icon',
 					variant: 'secondary'
 				})}><Ellipsis /></DropdownMenu.Trigger
@@ -58,9 +58,9 @@
 		</DropdownMenu.Root>
 
 		{#if file.type === 'image/jpeg' || file.type === 'image/png'}
-			<img src={file.utURL} alt={file.name} class="rounded-sm" />
+			<img src={file.utURL} alt={file.name} class="h-full w-full object-cover" />
 		{:else if file.type === 'application/pdf'}
-			<div class="flex h-full items-center justify-center rounded-sm bg-muted">
+			<div class="flex h-full w-full items-center justify-center bg-muted">
 				<FileText class="size-20 text-muted-foreground" />
 			</div>
 		{/if}

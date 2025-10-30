@@ -2,7 +2,7 @@ import { tool, type InferUITools, type ToolSet, type UIMessage } from 'ai';
 import { getRequestEvent } from '$app/server';
 import { error } from '@sveltejs/kit';
 import { db } from './db';
-import { studyPlanStep, studyStepTypes } from './db/schema';
+import { flashcard, studyPlanStep, studyStepTypes } from './db/schema';
 import z from 'zod';
 import Exa from 'exa-js';
 import { EXA_API_KEY } from '$env/static/private';
@@ -75,7 +75,13 @@ const flashCardTool = tool({
 		const { params } = getRequestEvent();
 
 		if (!params.project_id) error(404, 'No project ID');
-		console.log(args);
+
+		const { definition, term } = args;
+		await db.insert(flashcard).values({
+			term,
+			definition,
+			projectId: params.project_id
+		});
 	}
 });
 

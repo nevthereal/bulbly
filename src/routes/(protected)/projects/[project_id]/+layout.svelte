@@ -1,8 +1,7 @@
 <script lang="ts">
-	import DocumentChat from '$lib/components/DocumentChat.svelte';
+	import ChatContainer from '$lib/components/ChatContainer.svelte';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
 
-	import KnowledgeBase from '$lib/components/KnowledgeBase.svelte';
 	import { deleteProject, getProject } from '$lib/remote/projects.remote';
 	import { FlaskConical, Trash2 } from '@lucide/svelte';
 	import { buttonVariants } from '$lib/components/ui/button/button.svelte';
@@ -58,15 +57,13 @@
 		</svelte:boundary>
 	</div>
 
-	<div class="flex h-full gap-4 overflow-scroll">
-		<KnowledgeBase projectId={params.project_id} />
-		<DocumentChat projectId={params.project_id} />
-
-		<div class="flex h-full w-lg flex-col rounded-2xl border p-6">
+	<div class="m-4 flex h-full gap-4 overflow-scroll">
+		<div class="flex h-full w-lg max-w-2xl flex-col rounded-2xl border p-6">
 			<h1 class="flex items-center gap-2 border-b pb-2 text-2xl font-semibold">
-				<FlaskConical /> Tools (WIP)
+				<FlaskConical /> Tools
 			</h1>
 			{@render children()}
 		</div>
+		<ChatContainer projectId={params.project_id} />
 	</div>
 </main>
