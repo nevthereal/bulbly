@@ -60,7 +60,7 @@
 	<div class="m-4 flex h-full gap-4 overflow-scroll">
 		<div class="flex h-full w-lg max-w-2xl flex-col rounded-2xl border p-6">
 			<h1 class="flex items-center gap-2 border-b pb-2 text-2xl font-semibold">
-				<FlaskConical /> Tools (WIP)
+				<FlaskConical /> Tools
 			</h1>
 			{@render children()}
 		</div>
