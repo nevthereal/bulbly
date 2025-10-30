@@ -4,7 +4,6 @@
 	import { resolve } from '$app/paths';
 	import type { MyRouter } from '$lib/server/uploadthing';
 	import { goto } from '$app/navigation';
-	import { buttonVariants } from '$lib/components/ui/button/button.svelte';
 	import { Upload } from '@lucide/svelte';
 	import { twMerge } from 'tailwind-merge';
 
@@ -27,17 +26,21 @@
 		onUploadError: (e) => {
 			toast.error(e.message);
 		},
-		url: resolve('/(protected)/projects/[project_id]/tools/files/upload', params)
+		url: resolve('/(protected)/projects/[project_id]/tools/files/upload', params),
+		config: { cn: twMerge }
 	});
 </script>
 
-<UploadDropzone {uploader}>
+<UploadDropzone
+	{uploader}
+	class="border-border ut-button:bg-primary ut-button:text-primary-foreground ut-button:after:bg-primary ut-allowed-content:text-muted-foreground ut-label:text-foreground"
+>
 	<i slot="upload-icon">
 		<Upload />
 	</i>
 
 	<span slot="button-content" let:state>
-		{state.isUploading ? 'Uploading...' : 'Pick a file'}
+		{state.isUploading ? `Uploading... ${state.uploadProgress}%` : 'Pick a file'}
 	</span>
 	<span slot="label" let:state>
 		{state.ready ? 'Drag and drop files here' : 'Loading...'}
