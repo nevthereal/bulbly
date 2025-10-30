@@ -69,7 +69,7 @@ const flashCardTool = tool({
 		term: z.string(),
 		definition: z.string()
 	}),
-	name: 'study_plan',
+	name: 'flashcards',
 
 	execute: async (args) => {
 		const { params } = getRequestEvent();
