@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Logo from '$lib/assets/logo.png';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
-
 	import { Toaster } from '$lib/components/ui/sonner/index.js';
 	import { ModeWatcher } from 'mode-watcher';
 	import '../app.css';
@@ -10,6 +9,7 @@
 	import { getUser } from '$lib/remote/auth.remote';
 	import ModeToggle from '$lib/components/ModeToggle.svelte';
 	import { resolve } from '$app/paths';
+
 	let { children } = $props();
 </script>
 

@@ -9,6 +9,6 @@
 <Button
 	variant="ghost"
 	class="mt-2 mr-auto text-muted-foreground"
-	href={resolve('/(protected)/project/[project_id]', params)}><ArrowLeft /> All tools</Button
+	href={resolve('/(protected)/projects/[project_id]', params)}><ArrowLeft /> All tools</Button
 >
 {@render children()}

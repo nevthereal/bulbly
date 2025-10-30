@@ -19,8 +19,8 @@
 			{#snippet pending()}
 				<Loading thing="files" />
 			{/snippet}
-			{#snippet failed(e)}
-				{JSON.stringify(e)}
+			{#snippet failed()}
+				<p>Failed to load files</p>
 			{/snippet}
 			<ul class="grid grid-cols-2 gap-2">
 				{#each await getFiles(projectId) as file (file.id)}

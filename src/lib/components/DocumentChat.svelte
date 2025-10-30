@@ -15,7 +15,7 @@
 	const chat = new Chat<MyUIMessage>({
 		id: `${projectId}-chat`,
 		transport: new DefaultChatTransport({
-			api: resolve('/(protected)/project/[project_id]/api/chat', { project_id: projectId })
+			api: resolve('/(protected)/projects/[project_id]/api/chat', { project_id: projectId })
 		})
 	});
 
