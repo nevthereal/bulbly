@@ -30,6 +30,7 @@ export class UploadManager {
 		newFiles.forEach((file) => {
 			if (!existingNames.has(file.name)) {
 				this.files.push(file);
+				existingNames.add(file.name);
 			}
 		});
 	}
