@@ -51,8 +51,16 @@
 						<DropdownMenu.Separator />
 						{#each await getFiles(projectId) as file (file.id)}
 							<DropdownMenu.CheckboxItem
-								bind:checked={() => attachments.isInChat(file), () => attachments.add(file)}
-								>{file.name}</DropdownMenu.CheckboxItem
+								bind:checked={
+									() => attachments.isInChat(file),
+									(checked) => {
+										if (checked) {
+											attachments.add(file);
+										} else {
+											attachments.remove(file.id);
+										}
+									}
+								}>{file.name}</DropdownMenu.CheckboxItem
 							>
 						{/each}
 					</DropdownMenu.Group>
