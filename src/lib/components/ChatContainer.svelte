@@ -39,7 +39,7 @@
 		<MessageCircle /> Document Chat
 	</h1>
 	<div class="relative mt-4 flex h-full min-h-0 flex-col">
-		<ul bind:this={chatContainer} class="flex min-h-0 flex-1 flex-col gap-8 overflow-y-auto pb-32">
+		<ul bind:this={chatContainer} class="flex min-h-0 flex-1 flex-col gap-8 overflow-y-auto pb-48">
 			{#each chat.messages as message, messageIndex (messageIndex)}
 				<Message {message} />
 			{/each}
@@ -53,7 +53,7 @@
 		{#if !atBottom}
 			<Button
 				size="icon-sm"
-				class="absolute right-0 bottom-24"
+				class="absolute right-0 bottom-40"
 				variant="outline"
 				onclick={() => scroll.scrollToBottom()}
 				aria-label="Scroll to bottom"
