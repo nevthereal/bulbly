@@ -12,6 +12,7 @@
 	import type { MyRouter } from '$lib/server/uploadthing';
 	import { Upload } from '@lucide/svelte';
 	import { twMerge } from 'tailwind-merge';
+	import { settled, tick } from 'svelte';
 
 	let { params } = $props();
 	let open = $state(false);
@@ -19,11 +20,13 @@
 	const { createUploader } = generateSvelteHelpers<MyRouter>();
 
 	const uploader = createUploader('uploader', {
-		uploadProgressGranularity: 'all',
-		onClientUploadComplete: () => {
+		uploadProgressGranularity: 'coarse',
+		onClientUploadComplete: async () => {
+			await tick();
 			toast.success('Upload Completed');
-			open = false;
 			getFiles(params.project_id).refresh();
+			await settled();
+			open = false;
 		},
 		onUploadError: (e) => {
 			toast.error(e.message);
@@ -57,19 +60,19 @@
 <Drawer.Root bind:open>
 	<Drawer.Trigger class={buttonVariants()}><Upload /> Upload</Drawer.Trigger>
 	<Drawer.Content>
-		<div class="mx-auto max-w-sm">
+		<div class="mx-auto mb-8 max-w-sm">
 			<Drawer.Header>
 				<Drawer.Title>Upload files</Drawer.Title>
 			</Drawer.Header>
 			<UploadDropzone
 				{uploader}
-				class="ut-button:bg-primary ut-button:text-primary-foreground ut-button:after:bg-primary ut-allowed-content:text-muted-foreground ut-label:text-foreground"
+				class="p-6 ut-allowed-content:text-muted-foreground ut-label:text-foreground"
 			>
 				<i slot="upload-icon">
 					<Upload />
 				</i>
 
-				<span slot="button-content" let:state>
+				<span class={buttonVariants()} slot="button-content" let:state>
 					{state.isUploading ? `Uploading... ${state.uploadProgress}%` : 'Pick files'}
 				</span>
 				<span slot="label" let:state>
