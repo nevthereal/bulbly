@@ -62,6 +62,8 @@
 									}
 								}>{file.name}</DropdownMenu.CheckboxItem
 							>
+						{:else}
+							<DropdownMenu.Item disabled>No files in knowledge base</DropdownMenu.Item>
 						{/each}
 					</DropdownMenu.Group>
 				</DropdownMenu.Content>
