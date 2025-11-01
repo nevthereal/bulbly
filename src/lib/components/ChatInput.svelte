@@ -70,8 +70,8 @@
 			</DropdownMenu.Root>
 
 			{#each attachments.files as att (att.id)}
-				<ButtonGroup.Root>
-					<ButtonGroup.Text>
+				<ButtonGroup.Root class="w-48">
+					<ButtonGroup.Text class="min-w-0 overflow-x-auto font-mono">
 						{att.name}
 					</ButtonGroup.Text>
 					<InputGroup.Button
